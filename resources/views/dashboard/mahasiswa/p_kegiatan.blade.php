@@ -82,9 +82,17 @@
                                     @foreach ($pilihan_jawaban as $pilihan)
                                         <td>
                                             <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
+                                        </td>
+                                        <td>
                                             <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
+                                        </td>
+                                        <td>
                                             <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
+                                        </td>
+                                        <td>
                                             <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
+                                        </td>
+                                        <td>
                                             <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
                                         </td>
                                     @endforeach
