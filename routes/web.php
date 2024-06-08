@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Route;
 /**
  * ! Jangan ubah route yang ada dalam group ini
  * */
+Route::get('/', [HomeController::class, 'index'])->name('landing');
 Route::controller(AuthController::class)
     ->group(function () {
-        Route::get('/', 'checkToken')->name('check');
+        Route::get('/login', 'checkToken')->name('check');
         Route::get('/logout', 'logout')->name('logout'); // gunakan untuk logout
         Route::get('/roles', 'changeUserRole')->middleware('auth.token');
     });
@@ -61,7 +62,8 @@ Route::controller(MahasiswaController::class)
 Route::controller(MahasiswaController::class)
     ->prefix('/kuesioner')
     ->group(function () {
-        Route::get('/kegiatan', 'getPertanyaanKegiatanView');
+        Route::get('/kegiatan', 'getKegiatanView');
+        Route::get('/kegiatan/{id}', 'getPertanyaanKegiatanView');
     });
 
 Route::controller(AdminController::class)

@@ -6,10 +6,10 @@
         <!-- Section Title -->
         <div class="container section-title pb-4" data-aos="fade-up">
             <h2 class="">Kuesioner Kegiatan</h2>
-                @if ($list_pertanyaan->count() > 0)
+                {{-- @if ($list_pertanyaan->count() > 0)
                     {{ ' ' . $kegiatan->nama_kegiatan }}
 
-                @endif
+                @endif --}}
             </h2>
         </div><!-- End Section Title -->
 
@@ -71,7 +71,7 @@
                         </thead>
                         <tbody>
                             @if ($list_pertanyaan->count() > 0)
-                                @foreach ($list_pertanyaan as $key => $pertanyaan)
+                                @foreach ($list_pertanyaan as $pertanyaan)
                                 <tr>
                                     @php
                                         ++$countPertanyaan;

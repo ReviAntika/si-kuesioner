@@ -62,8 +62,18 @@ class MahasiswaController extends Controller
         return $result;
     }
 
+    public function getKegiatanView(){
+        $listKegiatan = $this->service->getListKegiatan();
+        // dd($listKegiatan);
+        return view('dashboard.mahasiswa.l_kegiatan', [
+            'title' => 'Kegiatan',
+            'data' => $listKegiatan,
+            ]);
+    }
+
     public function getPertanyaanKegiatanView() {
-        $list_pertanyaan = Pertanyaan::where('id')->get();
+        $list_pertanyaan = Pertanyaan::all();
+        // dd($list_pertanyaan);
         $pilihan_jawaban = PilihanJawaban::all();
 
         return view('dashboard.mahasiswa.p_kegiatan', [

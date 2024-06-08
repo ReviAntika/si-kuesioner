@@ -5,10 +5,14 @@
         {{-- yang login adalah mahasiswa  --}}
         @include('dashboard.mahasiswa.home', [ 'data' => $data ])
     @endif
-
+    
     @if (isset(session('role')['is_admin']))
         {{-- yang login adalah admin --}}
         @include('dashboard.admin.home', [ 'data' => $data ])
     @endif
     
+    @if ($data == 'Guest')
+        {{-- yang login adalah Guest  --}}
+        @include('dashboard.mahasiswa.home', [ 'data' => $data ])
+    @endif
 @endsection
