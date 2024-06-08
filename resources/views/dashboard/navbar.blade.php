@@ -19,9 +19,8 @@
               <li><a href="/kuesioner/kegiatan">Kegiatan</a></li>
             </ul>
           </li>
-          @endif
 
-          @if (isset(session('role')['is_admin']))
+          @elseif (isset(session('role')['is_admin']))
           <li class="dropdown"><a href="#"><span>Kuesioner</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">Perkuliahan</a></li>
@@ -34,14 +33,27 @@
               <li><a href="#">Kegiatan</a></li>
             </ul>
           </li>
-          @endif
+          @else
+           <li class="dropdown"><a href="#"><span>Kuesioner</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+             <ul>
+               <li><a href="/kuesioner/kegiatan">Kegiatan</a></li>
+             </ul>
+           </li>
+           @endif
 
           <li><a href="/profil">Profil</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
+      <h1>
 
+        {{ Session::has('role'); }}
+      </h1>
+      @if (session()->has('token'))
       <a class="btn-getstarted" href="/logout">Logout</a>
+      @else
+      <a class="btn-getstarted" href="/login">Login</a>
+      @endif
 
     </div>
   </header>

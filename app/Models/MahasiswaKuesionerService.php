@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\MyWebService;
+use Illuminate\Support\Facades\DB;
 
 class MahasiswaKuesionerService extends MyWebService
 {
@@ -76,5 +77,9 @@ class MahasiswaKuesionerService extends MyWebService
 
       public function getPilihanJawaban() {
         return $this->get(null, '/pertanyaan/pilihan-jawaban');
+      }
+
+      public function getListKegiatan(){
+        return DB::table('tb_kegiatan')->get();
       }
 }

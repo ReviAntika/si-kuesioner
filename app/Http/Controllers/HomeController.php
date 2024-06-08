@@ -30,6 +30,11 @@ class HomeController extends Controller
              * jika yang login adalah admin
              */
             $data = 'Admin';
+        } else{
+               /**
+             * jika tidak Login
+             */
+            $data = 'Guest';
         }
 
         return view('dashboard.home', [
