@@ -35,8 +35,6 @@ class AdminController extends Controller
      */
     public function kuesionerKegiatanTambah(Request $request) {
 
-        $tanggalAwal = Carbon::parse($request->dari_tgl)->format('Y-m-d');
-        $tanggalAkhir = Carbon::parse($request->sampai_tgl)->format('Y-m-d');
         $kdAcara = 'SB'. $request->organisasi . Carbon::parse($request->dari_tgl)->format('dmY');
         // dd($kdAcara);
         $data = [
@@ -66,6 +64,19 @@ class AdminController extends Controller
             'title' => 'Pertanyaan Kuesioner Kegiatan',
             'data' => $lihatPertanyaan,
         ]);
+    }
+    public function kuesionerKegiatanPertanyaanEdit(Request $request) {
+        $tambah = new Tambahan();
+        $id = $request->idPertanyaan;
+        // dd($id);
+        if ($request->idPertanyaan != null) {
+            $data =['pertanyaan'=>$request->pertanyaan];
+            $tambah->UpdateKuesionerKegiatanPertanyaan($id,$data);
+            return redirect()->back()->with('success','Data Berhasil Di Edit');
+
+        }else{
+            abort(403);
+        }
     }
 
 }

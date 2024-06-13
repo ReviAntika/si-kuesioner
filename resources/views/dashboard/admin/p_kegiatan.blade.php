@@ -45,7 +45,11 @@
                                         <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
                                     </td>
                                 @endforeach
-                                <td class="text-center"><a href="#" class="btn btn-success "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btnModalEditPertanyaan" data-bs-target="#modalKegiatanPertanyaan" data-idPertanyaan="{{$pertanyaan->id}} " data-pertanyaan="{{$pertanyaan->pertanyaan}}">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                </td>
                             </tr>
                             @endforeach
                         @else
@@ -59,5 +63,41 @@
         </div>
       </div>
     </section>
-
+<!-- Modal -->
+<div class="modal fade" id="modalKegiatanPertanyaan" tabindex="-1" aria-labelledby="modalPertanyaanKegiatan" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalPertanyaanKegiatan">Edit Pertanyaan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form action="/admin/kuesioner/kegiatan/pertanyaan/edit" method="post">
+                        @csrf
+                        <input type="hidden" name="idPertanyaan" id="idPertanyaan" value="">
+                        <div class="mb-3">
+                            {{-- {{$data->idPertanyaan}} --}}
+                            <label for="pertanyaan" class="form-label">Pertanyaan</label>
+                            <input type="text" class="form-control" id="pertanyaan" name="pertanyaan" rows="3" value="">
+                        </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" >Save changes</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+<script>
+    $("#btnModalEditPertanyaan").click(function () {
+    var ids = $(this).attr('data-idPertanyaan');
+    var pert = $(this).attr('data-pertanyaan');
+    $("#idPertanyaan").val( ids );
+    $("#pertanyaan").val( pert );
+    $('#myModal').modal('show');
+});
+</script>
 @endsection

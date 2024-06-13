@@ -43,4 +43,7 @@ class Tambahan extends Model
 
         return ['list_pertanyaan' => $pertanyaan, 'pilihan'=>$pilihan]; 
     }
+    public function UpdateKuesionerKegiatanPertanyaan($id,$data) {
+        return DB::table('tb_pertanyaan')->where('id',$id)->update($data); 
+    }
 }
