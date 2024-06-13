@@ -47,12 +47,11 @@
       </nav>
       <h1>
 
-        {{ Session::has('role'); }}
       </h1>
       @if (session()->has('token'))
-      <a class="btn-getstarted" href="/logout">Logout</a>
+        <a class="btn-getstarted" href="/logout">Logout</a>
       @else
-      <a class="btn-getstarted" href="/login">Login</a>
+        <a class="btn-getstarted" href="/login">Login</a>
       @endif
 
     </div>
