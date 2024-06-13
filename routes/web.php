@@ -10,12 +10,18 @@ use Illuminate\Support\Facades\Route;
 /**
  * ! Jangan ubah route yang ada dalam group ini
  * */
-Route::get('/', [HomeController::class, 'index'])->name('landing');
+
+Route::middleware('auth.guest')
+    ->group(function () {
+        Route::get('/guest/home', [HomeController::class, 'index'])->name('landing');
+    });
+
 Route::controller(AuthController::class)
     ->group(function () {
-        Route::get('/login', 'checkToken')->name('check');
+        Route::get('/', 'checkToken')->name('check');
         Route::get('/logout', 'logout')->name('logout'); // gunakan untuk logout
         Route::get('/roles', 'changeUserRole')->middleware('auth.token');
+        Route::get('/login', 'redirectToLogin')->name('login');
     });
 
 /**

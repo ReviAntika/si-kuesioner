@@ -60,7 +60,8 @@ class AuthController extends Controller
                 return redirect()->route('home');
             }
 
-            return self::redirectToVerifyPage();
+            // return self::redirectToVerifyPage();
+            return redirect()->route('landing');
         }
     }
 
@@ -93,7 +94,7 @@ class AuthController extends Controller
         );
     }
 
-    private function redirectToLogin() {
+    public function redirectToLogin() {
         return redirect()->away(
             config('myconfig.login.base_url') . 'login?site=' . config('app.url')
         );
