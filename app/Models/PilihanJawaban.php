@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class PilihanJawaban extends Model
 {
-    protected $table = 'tb_jawaban';
+    protected $table = 'tb_pilihan';
     protected $guarded = ['id'];
 }

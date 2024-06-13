@@ -70,6 +70,8 @@ Route::controller(MahasiswaController::class)
     ->group(function () {
         Route::get('/kegiatan', 'getKegiatanView');
         Route::get('/kegiatan/{id}', 'getPertanyaanKegiatanView');
+        Route::post('/kegiatan/{id}', 'addJawabanKegiatan');
+        Route::get('/kegiatan/saran/{id}', 'saranKegiatanView')->name('saranKegiatan');
     });
 
 Route::controller(AdminController::class)

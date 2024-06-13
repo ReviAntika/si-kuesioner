@@ -15,7 +15,6 @@
 
         <!-- Nama Input -->
         <div class="container mt-4" data-aos="fade-up">
-                @csrf
                 <div class="card">
                     <div class="card-body">
                         <div class="mb-3 row">
@@ -51,8 +50,8 @@
         </div> <!-- End Petunjuk Pengisian Angket -->
 
         <div class="container">
-            <div class="row gy-2 justify-content-center" data-aos="fade-up">
-                    @csrf
+            <div class="row gy-2 justify-content-center" data-aos="fade-up" id="form-kegiatan">
+                <form action="" >
                     @php
                         // hitung total pertanyaan
                         $countPertanyaan = 0;
@@ -83,18 +82,6 @@
                                         <td>
                                             <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
                                         </td>
-                                        <td>
-                                            <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
-                                        </td>
-                                        <td>
-                                            <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
-                                        </td>
-                                        <td>
-                                            <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
-                                        </td>
-                                        <td>
-                                            <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
-                                        </td>
                                     @endforeach
 
                                 </tr>
@@ -106,9 +93,9 @@
                             @endif
                         </tbody>
                     </table>
-
+                    @csrf
                     <input type="hidden" name="total_pertanyaan" value="{{ $countPertanyaan }}">
-
+                    <input type="hidden" name="kegiatanId" value="{{ $id_kegiatan}}">
 
                     {{-- Tombol menuju pengisian saran --}}
                     <div class="d-flex">
@@ -120,4 +107,80 @@
             </div>
         </div>
     </section>
+    <script>
+        $(document).ready(() => {
+            $('#form-kegiatan').on('submit', ((event) => {
+                event.preventDefault();
+
+                // * get setiap value yang diperlukan
+                const token = $('input[name="_token"]').val();
+                const totalPertanyaan = $('input[name="total_pertanyaan"]').val();
+                const kegiatanId = $('input[name="kegiatanId"]').val();
+                const namaResponden = $('input[name="nama"]').val();
+                const selectedRadios = $('input[type="radio"]:checked');
+                const tempValueArr = [];
+
+                // check apakah semua pertanyaan sudah dijawab
+                if (selectedRadios.length != totalPertanyaan) {
+                    return Swal.fire({
+                        icon: 'warning',
+                        text: 'Mohon jawab semua pertanyaan yang tersedia',
+                        showConfirmButton: false,
+                        toast: true,
+                        timer: 3000, // detik
+                        timerProgressBar: true,
+                        position: 'top-right'
+                    });
+                }
+
+                // * urai setiap nilai pada radio button
+                selectedRadios.each((index, item) => {
+                    const radioName = $(item).attr('name');
+                    const pertanyaanId = radioName.split('_');
+                    const kdPoint = $(item).val();
+
+                    tempValueArr.push({ pertanyaan_id: pertanyaanId[1], jawaban: kdPoint });
+                });
+
+                // * kelompokkan data untuk dikirim
+                const payload = {
+                    _token: token,
+                    _method: 'POST',
+                    kegiatan_id: kegiatanId,
+                    nama_responden: namaResponden,
+                    list_jawaban: tempValueArr
+                };
+                console.log(payload);
+
+                $.ajax({
+                    url: '/kuesioner/kegiatan/' + kegiatanId,
+                    type: 'POST',
+                    data: payload,
+                    beforeSend: () => {
+                        $.LoadingOverlay('show');
+                    },
+                    success: (response) => {
+                        console.log('berhasil'+ namaResponden);
+                        window.location.href = '/kuesioner/kegiatan/saran/' + kegiatanId;
+                    },
+                    error: (xhr) => {
+                        console.log(xhr);
+
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Terjadi kesalahan. Hubungan IT Support.',
+                            toast: true,
+                            timerProgressBar: true,
+                            timer: 3000,
+                            showConfirmButton: false,
+                            position: 'top-right'
+                        });
+                    },
+                    complete: () => {
+                        $.LoadingOverlay('hide');
+                    }
+                });
+            }))
+        });
+    </script>
 @endsection
