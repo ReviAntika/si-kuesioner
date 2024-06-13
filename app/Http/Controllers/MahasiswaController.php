@@ -8,6 +8,7 @@ use App\Models\MahasiswaKuesionerService;
 // ? Model
 use App\Models\Pertanyaan;
 use App\Models\PilihanJawaban;
+use App\Models\Tambahan;
 
 class MahasiswaController extends Controller
 {
@@ -62,6 +63,8 @@ class MahasiswaController extends Controller
         return $result;
     }
 
+    //KHUSUS UNTUK KEGIATAN MULAI DARI BAWAH
+
     public function getKegiatanView(){
         $listKegiatan = $this->service->getListKegiatan();
         // dd($listKegiatan);
@@ -71,15 +74,37 @@ class MahasiswaController extends Controller
             ]);
     }
 
-    public function getPertanyaanKegiatanView() {
+    public function getPertanyaanKegiatanView($id) {
         $list_pertanyaan = Pertanyaan::all();
-        // dd($list_pertanyaan);
         $pilihan_jawaban = PilihanJawaban::all();
+        $id_kegiatan = $id;
+        // dd([$list_pertanyaan,$pilihan_jawaban]); 
+
 
         return view('dashboard.mahasiswa.p_kegiatan', [
             'title' => 'Kuesioner Kegiatan',
             'list_pertanyaan' => $list_pertanyaan,
-            'pilihan_jawaban' => $pilihan_jawaban
+            'pilihan_jawaban' => $pilihan_jawaban,
+            'id_kegiatan' => $id_kegiatan
+        ]);
+    }
+
+    public function addJawabanKegiatan(Request $request) {
+        // dd($request->all());
+        $dataKegiatan = new Tambahan(); 
+
+        $dataKegiatan->sendJawabanKuesionerKegiatan(
+            $request->nama_responden, $request->kegiatan_id, $request->list_jawaban
+        );
+
+        return redirect()->route('saranKegiatan');
+    }
+    public function saranKegiatanView($kuesionerKegiatanId) {
+        return view('dashboard.mahasiswa.saran_kegiatan', [
+            'title' => 'Kuesioner Kegiatan',
+            'data' => [
+                'kuesioner_saran_kegiatan_id' => $kuesionerKegiatanId
+            ],
         ]);
     }
 }
