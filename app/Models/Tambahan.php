@@ -26,4 +26,21 @@ class Tambahan extends Model
         // dd($payload);
         return 'sukses';
     }
+
+    public function addDataKegiatan($data)
+    {
+        return DB::table('tb_kegiatan')->insert($data);
+    }
+        /**
+     * digunakan untuk melihat list kuesioner kegiatan yang tersedia
+     */
+    public function getListKuesionerKegiatan() {
+        return DB::table('tb_kegiatan')->get();
+    }
+    public function getListKuesionerKegiatanPertanyaan() {
+        $pertanyaan = DB::table('tb_pertanyaan')->get();
+        $pilihan = DB::table('tb_pilihan')->get();
+
+        return ['list_pertanyaan' => $pertanyaan, 'pilihan'=>$pilihan]; 
+    }
 }
