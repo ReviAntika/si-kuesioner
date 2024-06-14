@@ -79,4 +79,7 @@ Route::controller(AdminController::class)
     ->middleware(['auth.token', 'auth.admin'])
     ->group(function () {
         Route::get('/kegiatan', 'kuesionerKegiatanView');
+        Route::post('/kegiatan/add', 'kuesionerKegiatanTambah');
+        Route::get('/kegiatan/pertanyaan', 'kuesionerKegiatanPertanyaan');
+        Route::post('/kegiatan/pertanyaan/edit', 'kuesionerKegiatanPertanyaanEdit');
     });

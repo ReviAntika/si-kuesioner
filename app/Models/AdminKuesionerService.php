@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\MyWebService;
+use Illuminate\Support\Facades\DB;
 
 class AdminKuesionerService extends MyWebService
 {
@@ -70,12 +71,7 @@ class AdminKuesionerService extends MyWebService
         return $this->post($payload, '/kegiatan/add');
     }
 
-    /**
-     * digunakan untuk melihat list kuesioner kegiatan yang tersedia
-     */
-    public function getListKuesionerKegiatan() {
-        return $this->get(null, '/kegiatan/list');
-    }
+
 
     /**
      * * END - Kuesioner Kegiatan
@@ -142,4 +138,6 @@ class AdminKuesionerService extends MyWebService
 
         return $this->put($payload, '/pertanyaan/edit');
     }
+
+
 }
