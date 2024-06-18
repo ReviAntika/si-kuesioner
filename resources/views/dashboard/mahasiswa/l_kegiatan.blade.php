@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     @foreach ($data as $kegiatan)
-                        <a href="kegiatan/{{$kegiatan->id}}" class="btn btn-primary">{{$kegiatan->kegiatan}}</a>
+                        <a href="/kuesioner/kegiatan/{{$kegiatan->id}}" class="btn btn-primary">{{$kegiatan->kegiatan}}</a>
                     @endforeach
                 </div>
             </div>

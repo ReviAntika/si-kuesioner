@@ -37,7 +37,7 @@
                 const token = $('input[name="_token"]').val();
 
                 $.ajax({
-                    url: '/kuesioner/perkuliahan/saran/' + id,
+                    url: '/kuesioner/kegiatan/saran/kirim/' + id,
                     type: 'POST',
                     data: {
                         _token: token,
@@ -50,7 +50,7 @@
                     },
                     success: (response, xhr) => {
 
-                        window.location.href = '/kuesioner/perkuliahan';
+                        window.location.href = '/';
                     },
                     error: (xhr) => {
                         console.log(xhr);

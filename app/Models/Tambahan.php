@@ -37,6 +37,11 @@ class Tambahan extends Model
     public function getListKuesionerKegiatan() {
         return DB::table('tb_kegiatan')->get();
     }
+    public function getListKuesionerKegiatanWithPertanyaan() {
+        return DB::table('tb_jawaban')
+        ->join('tb_pertanyaan','tb_pertanyaan.id','=','tb_jawaban.pertanyaan_id')
+        ->get();
+    }
     public function getListKuesionerKegiatanPertanyaan() {
         $pertanyaan = DB::table('tb_pertanyaan')->get();
         $pilihan = DB::table('tb_pilihan')->get();
@@ -45,5 +50,14 @@ class Tambahan extends Model
     }
     public function UpdateKuesionerKegiatanPertanyaan($id,$data) {
         return DB::table('tb_pertanyaan')->where('id',$id)->update($data); 
+    }
+    public function sendSaranKegiatan($saran, $kegiatanId)
+    {
+        $payload = [
+            'id_kegiatan'=> $kegiatanId,
+            'saran'=> $saran
+        ];
+        DB::table('tb_saran')->insert($payload);
+        return 'sukses';
     }
 }
