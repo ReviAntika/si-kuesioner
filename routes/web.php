@@ -70,8 +70,9 @@ Route::controller(MahasiswaController::class)
     ->group(function () {
         Route::get('/kegiatan', 'getKegiatanView');
         Route::get('/kegiatan/{id}', 'getPertanyaanKegiatanView');
-        Route::post('/kegiatan/{id}', 'addJawabanKegiatan');
+        Route::post('/kegiatan/kirim/{id}', 'addJawabanKegiatan');
         Route::get('/kegiatan/saran/{id}', 'saranKegiatanView')->name('saranKegiatan');
+        Route::post('/kegiatan/saran/kirim/{id}', 'addSaranKegiatan');
     });
 
 Route::controller(AdminController::class)
@@ -79,6 +80,7 @@ Route::controller(AdminController::class)
     ->middleware(['auth.token', 'auth.admin'])
     ->group(function () {
         Route::get('/kegiatan', 'kuesionerKegiatanView');
+        Route::get('/kegiatan/hasil', 'kuesionerKegiatanHasilView');
         Route::post('/kegiatan/add', 'kuesionerKegiatanTambah');
         Route::get('/kegiatan/pertanyaan', 'kuesionerKegiatanPertanyaan');
         Route::post('/kegiatan/pertanyaan/edit', 'kuesionerKegiatanPertanyaanEdit');

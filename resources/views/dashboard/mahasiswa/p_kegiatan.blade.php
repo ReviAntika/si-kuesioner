@@ -17,6 +17,10 @@
         <div class="container mt-4" data-aos="fade-up">
                 <div class="card">
                     <div class="card-body">
+                        @if (session()->has('token'))
+                        <input type="hidden" id="nama" name="nama" value="{{ session('profile')['nama'] }}">
+                        
+                        @else
                         <div class="mb-3 row">
                             <label for="nama" class="col-sm-1 col-form-label"><strong>Nama:</strong></label>
                             <div class="col-sm-7">
@@ -24,6 +28,7 @@
                             </div>
                           </div>
                         </div>
+                        @endif
                     </div>
                 </div>
         </div><!-- End Nama Input -->
@@ -115,7 +120,7 @@
                 // * get setiap value yang diperlukan
                 const token = $('input[name="_token"]').val();
                 const totalPertanyaan = $('input[name="total_pertanyaan"]').val();
-                const kegiatanId = $('input[name="kegiatanId"]').val();
+                const IdKegiatan = $('input[name="kegiatanId"]').val();
                 const namaResponden = $('input[name="nama"]').val();
                 const selectedRadios = $('input[type="radio"]:checked');
                 const tempValueArr = [];
@@ -146,22 +151,24 @@
                 const payload = {
                     _token: token,
                     _method: 'POST',
-                    kegiatan_id: kegiatanId,
+                    kegiatan_id: IdKegiatan,
                     nama_responden: namaResponden,
                     list_jawaban: tempValueArr
                 };
                 console.log(payload);
 
                 $.ajax({
-                    url: '/kuesioner/kegiatan/' + kegiatanId,
+                    url: '/kuesioner/kegiatan/kirim/' + IdKegiatan,
                     type: 'POST',
                     data: payload,
+
                     beforeSend: () => {
+                        // console.log(data);
                         $.LoadingOverlay('show');
                     },
                     success: (response) => {
                         console.log('berhasil'+ namaResponden);
-                        window.location.href = '/kuesioner/kegiatan/saran/' + kegiatanId;
+                        window.location.href = '/kuesioner/kegiatan/saran/' + IdKegiatan;
                     },
                     error: (xhr) => {
                         console.log(xhr);
