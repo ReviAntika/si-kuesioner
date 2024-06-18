@@ -27,6 +27,21 @@ class AdminController extends Controller
             'data' => $listKuesionerKegiatan,
         ]);
     }
+    public function kuesionerKegiatanHasilView() {
+        $tambah = new Tambahan();
+
+        $listKuesionerKegiatan =$tambah->getListKuesionerKegiatanWithPertanyaan();
+        dd($listKuesionerKegiatan);
+        $idkegiatan=0;
+        $respons = $tambah->get();
+
+        // dd($listKuesionerKegiatan);
+
+        return view('dashboard.admin.h_kegiatan', [
+            'title' => 'Kuesioner Kegiatan',
+            'data' => $listKuesionerKegiatan,
+        ]);
+    }
 
         /**
      * ini buat tambah data kegiatan
