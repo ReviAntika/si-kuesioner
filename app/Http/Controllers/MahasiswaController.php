@@ -78,7 +78,7 @@ class MahasiswaController extends Controller
         $list_pertanyaan = Pertanyaan::all();
         $pilihan_jawaban = PilihanJawaban::all();
         $id_kegiatan = $id;
-        // dd([$list_pertanyaan,$pilihan_jawaban]); 
+        // dd([$list_pertanyaan,$pilihan_jawaban]);
 
 
         return view('dashboard.mahasiswa.p_kegiatan', [
@@ -91,7 +91,7 @@ class MahasiswaController extends Controller
 
     public function addJawabanKegiatan(Request $request) {
         // dd($request->all());
-        $dataKegiatan = new Tambahan(); 
+        $dataKegiatan = new Tambahan();
 
         $dataKegiatan->sendJawabanKuesionerKegiatan(
             $request->nama_responden, $request->kegiatan_id, $request->list_jawaban
