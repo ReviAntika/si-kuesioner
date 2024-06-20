@@ -79,9 +79,18 @@ Route::controller(AdminController::class)
     ->prefix('/admin/kuesioner')
     ->middleware(['auth.token', 'auth.admin'])
     ->group(function () {
+
+        // ROUTE KEGIATAN
+
         Route::get('/kegiatan', 'kuesionerKegiatanView');
         Route::get('/kegiatan/hasil', 'kuesionerKegiatanHasilView');
         Route::post('/kegiatan/add', 'kuesionerKegiatanTambah');
         Route::get('/kegiatan/pertanyaan', 'kuesionerKegiatanPertanyaan');
         Route::post('/kegiatan/pertanyaan/edit', 'kuesionerKegiatanPertanyaanEdit');
+
+        // ROUTE PERKULIAHAN
+        
+        Route::get('/perkuliahan', 'kuesionerPerkuliahanView');
+        Route::post('/perkuliahan/tahun-ajaran/{kdTahun}/{jnsMhs}/{kd_kampus}', 'kuesionerPerkuliahanViewTahun');
+        Route::get('/perkuliahan/pertanyaan/show', 'getPertanyaanView');
     });
