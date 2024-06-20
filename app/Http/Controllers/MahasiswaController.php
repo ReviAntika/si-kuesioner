@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MahasiswaKuesionerService;
-
-// ? Model
 use App\Models\Pertanyaan;
 use App\Models\PilihanJawaban;
 use App\Models\Tambahan;
@@ -65,21 +63,20 @@ class MahasiswaController extends Controller
 
     //KHUSUS UNTUK KEGIATAN MULAI DARI BAWAH
 
-    public function getKegiatanView(){
+    public function getKegiatanView() {
         $listKegiatan = $this->service->getListKegiatan();
         // dd($listKegiatan);
         return view('dashboard.mahasiswa.l_kegiatan', [
             'title' => 'Kegiatan',
             'data' => $listKegiatan,
-            ]);
+        ]);
     }
 
     public function getPertanyaanKegiatanView($id) {
         $list_pertanyaan = Pertanyaan::all();
         $pilihan_jawaban = PilihanJawaban::all();
         $id_kegiatan = $id;
-        // dd([$list_pertanyaan,$pilihan_jawaban]); 
-
+        // dd([$list_pertanyaan,$pilihan_jawaban]);
 
         return view('dashboard.mahasiswa.p_kegiatan', [
             'title' => 'Kuesioner Kegiatan',
@@ -89,17 +86,17 @@ class MahasiswaController extends Controller
         ]);
     }
 
-    public function addJawabanKegiatan(Request $request , $id) {
+    public function addJawabanKegiatan(Request $request, $id) {
         // dd($request->all());
         $dataKegiatan = new Tambahan();
-        $idKegiatan = $id; 
 
         $dataKegiatan->sendJawabanKuesionerKegiatan(
             $request->nama_responden, $request->kegiatan_id, $request->list_jawaban
         );
 
-        return redirect('/kuesioner/kegiatan/saran/'.$id)->with($idKegiatan);
+        return redirect('/kuesioner/kegiatan/saran/'.$id)->with('idKegiatan', $id);
     }
+
     public function saranKegiatanView($idKegiatan) {
         return view('dashboard.mahasiswa.saran_kegiatan', [
             'title' => 'Kuesioner Kegiatan',
@@ -108,10 +105,10 @@ class MahasiswaController extends Controller
             ],
         ]);
     }
+
     public function addSaranKegiatan(Request $request) {
-       $dataKegiatan = new Tambahan();
-       $result = $dataKegiatan->sendSaranKegiatan($request->saran,$request->id
-       );
+        $dataKegiatan = new Tambahan();
+        $result = $dataKegiatan->sendSaranKegiatan($request->saran, $request->id);
 
         return $result;
     }

@@ -5,7 +5,7 @@
 
   <!-- Section Title -->
   <div class="container section-title pb-4" data-aos="fade-up">
-    <h2 class="">Hasil Kuesioner Kegiatan</h2>
+    <h2 class="">List Responden Hasil Kegiatan</h2>
   </div><!-- End Section Title -->
 
   <div class="container">
@@ -16,32 +16,29 @@
               <tr>
                 <th scope="col">No</th>
                 <th scope="col">Tahun</th>
+                <th scope="col">Nama</th>
                 <th scope="col">Tanggal Acara</th>
                 <th scope="col">Penyelenggara</th>
                 <th scope="col">Kegiatan</th>
-                <th scope="col">Status</th>
                 <th scope="col">Aksi</th>
               </tr>
             </thead>
             <tbody>
-                @if ($data != null)
-                     @foreach ($data as $item)
+                @if (array_key_exists('responden', $data) and array_key_exists('kegiatan', $data))
+                     @foreach ($data['responden'] as $key => $item)
                     <?php
-                        $no=1;
-                        $tglAwal = \Carbon\Carbon::parse($item->dari_tgl)->format('d F Y');
-                        $tglAkhir = \Carbon\Carbon::parse($item->sampai_tgl)->format('d F Y');
-
+                        $tglAwal = \Carbon\Carbon::parse($data['kegiatan']['dari_tgl'])->format('d F Y');
+                        $tglAkhir = \Carbon\Carbon::parse($data['kegiatan']['sampai_tgl'])->format('d F Y');
                     ?>
                     <tr>
-                        <td>{{$no++}}</td>
-                        <td>{{$item->tahun}}</td>
-                        <td>{{$tglAwal .' - '.$tglAkhir}}</td>
-                        <td>{{$item->penyelenggara}}</td>
-                        <td>{{$item->kegiatan}}</td>
-                        <td>{{$item->total_responden}}</td>
-
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $data['kegiatan']['tahun'] }}</td>
+                        <td>{{ $key }}</td>
+                        <td>{{ $tglAwal . ' - ' .$tglAkhir }}</td>
+                        <td>{{ $data['kegiatan']['penyelenggara'] }}</td>
+                        <td>{{ $data['kegiatan']['kegiatan'] }}</td>
                         <td>
-                            <a href="/admin/kuesioner/kegiatan/hasil/list_responden/{{$item->id}}" class="btn btn-primary">View</a>
+                            <a href="/admin/kuesioner/kegiatan/hasil/list_reponden/detail_jawaban/{{$key}}/{{$data['kegiatan']['id']}}" class="btn btn-primary">Lihat Jawaban</a>
                         </td>
                     </tr>
                     @endforeach

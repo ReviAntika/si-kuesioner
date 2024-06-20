@@ -60,11 +60,11 @@ class AdminKuesionerService extends MyWebService
     /**
      * digunakan untuk menambah kuesioner kegiatan
      */
-    public function addKuesionerKegiatan($tanggalMulai, $tanggalAkhir, $organisasi, $kegiatan) {
+    public function addKuesionerKegiatan($tanggalMulai, $tanggalAkhir, $penyelenggara, $kegiatan) {
         $payload = [
             'tanggal_mulai' => $tanggalMulai,
             'tanggal_akhir' => $tanggalAkhir,
-            'organisasi' => $organisasi,
+            'penyelenggara' => $penyelenggara,
             'kegiatan' => $kegiatan
         ];
 
@@ -80,7 +80,7 @@ class AdminKuesionerService extends MyWebService
     /**
      * * COMMON - Dapat digunakan untuk perkuliahan dan kegiatan
      */
-    
+
     /**
      * digunakan untuk melihat jenis pertanyaan kuesioner yang ada
      * saat ini ada dua, yaitu: Perkuliahan dan Kegiatan
