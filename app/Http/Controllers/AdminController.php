@@ -19,6 +19,44 @@ class AdminController extends Controller
         $this->service = new AdminKuesionerService();
     }
 
+    public function kuesionerPerkuliahanView()
+    {
+        $listTahunAjaran = $this->service->getTahunAjaranKuesionerPerkuliahan()->getData('data');
+        
+        // dd($listTahunAjaran);
+        return view('dashboard.admin.perkuliahan', [
+            'title' => 'Kuesioner Perkuliahan',
+            'data' => $listTahunAjaran,
+        ]);
+    }
+
+    public function kuesionerPerkuliahanViewTahun($tahunId, $jenisMahasiswa, $kodeKampus)
+    {
+        $listData = $this->service->getMatkulForKuesionerPerkuliahan($tahunId, $jenisMahasiswa, $kodeKampus)->getData('data');
+        $listDataByTahunAjaran = $listData['data']['matakuliah'];
+        
+        return $listDataByTahunAjaran;
+    }
+
+    public function getPertanyaanView() {
+        $jenisId = 1;
+        $listPertanyaan = $this->service->getPertanyaanKuesioner($jenisId)->getData('data');
+        // dd($listPertanyaan);
+        return view('dashboard.admin.p_perkuliahan', [
+            'title' => 'Kuesioner Perkuliahan',
+            'list_pertanyaan' => $listPertanyaan
+        ]);
+    }
+
+
+
+
+
+
+
+
+    // CONTROLLER FOR KEGIATAN 
+
     public function kuesionerKegiatanView() {
         $tambah = new Tambahan();
 
