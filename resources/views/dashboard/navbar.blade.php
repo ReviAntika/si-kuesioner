@@ -23,7 +23,7 @@
           @elseif (isset(session('role')['is_admin']))
           <li class="dropdown"><a href="#"><span>Kuesioner</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="#">Perkuliahan</a></li>
+              <li><a href="/admin/kuesioner/perkuliahan">Perkuliahan</a></li>
               <li><a href="/admin/kuesioner/kegiatan">Kegiatan</a></li>
             </ul>
           </li>

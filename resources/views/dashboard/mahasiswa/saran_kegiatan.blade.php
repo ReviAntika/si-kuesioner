@@ -49,7 +49,15 @@
                         $.LoadingOverlay('show');
                     },
                     success: (response, xhr) => {
-
+                        Swal.fire({
+                            icon: 'Success',
+                            text: 'Berhasil Menambahkan Saran.',
+                            toast: true,
+                            timerProgressBar: true,
+                            timer: 3000,
+                            showConfirmButton: false,
+                            position: 'top-right'
+                        });
                         window.location.href = '/';
                     },
                     error: (xhr) => {

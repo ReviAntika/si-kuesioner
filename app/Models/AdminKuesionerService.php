@@ -139,5 +139,8 @@ class AdminKuesionerService extends MyWebService
         return $this->put($payload, '/pertanyaan/edit');
     }
 
+    public function getPertanyaanKuesioner($jenisId) {
+        return $this->get(null, "/pertanyaan?jenis_id=$jenisId");
+    }
 
 }
