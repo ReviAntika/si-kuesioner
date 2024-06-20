@@ -12,7 +12,7 @@ class Tambahan extends Model
      * ini Dipakai untuk post data kegiatan
      */
     public function sendJawabanKuesionerKegiatan($namaResponden, $kegiatanId, array $listJawaban) {
-        
+
         foreach ($listJawaban as $key => $value) {
             $payload = [
                 'nama_responden' => $namaResponden,
@@ -38,18 +38,17 @@ class Tambahan extends Model
         return DB::table('tb_kegiatan')->get();
     }
     public function getListKuesionerKegiatanWithPertanyaan() {
-        return DB::table('tb_jawaban')
-        ->join('tb_pertanyaan','tb_pertanyaan.id','=','tb_jawaban.pertanyaan_id')
+        return DB::table('tb_kegiatan')
         ->get();
     }
     public function getListKuesionerKegiatanPertanyaan() {
         $pertanyaan = DB::table('tb_pertanyaan')->get();
         $pilihan = DB::table('tb_pilihan')->get();
 
-        return ['list_pertanyaan' => $pertanyaan, 'pilihan'=>$pilihan]; 
+        return ['list_pertanyaan' => $pertanyaan, 'pilihan'=>$pilihan];
     }
     public function UpdateKuesionerKegiatanPertanyaan($id,$data) {
-        return DB::table('tb_pertanyaan')->where('id',$id)->update($data); 
+        return DB::table('tb_pertanyaan')->where('id',$id)->update($data);
     }
     public function sendSaranKegiatan($saran, $kegiatanId)
     {
