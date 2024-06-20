@@ -84,4 +84,6 @@ Route::controller(AdminController::class)
         Route::post('/kegiatan/add', 'kuesionerKegiatanTambah');
         Route::get('/kegiatan/pertanyaan', 'kuesionerKegiatanPertanyaan');
         Route::post('/kegiatan/pertanyaan/edit', 'kuesionerKegiatanPertanyaanEdit');
+        Route::get('/kegiatan/hasil/list_responden/{id}', 'kuesionerKegiatanListRespondenView');
+        Route::get('/kegiatan/hasil/list_responden/{responden}/{kegiatan_id}', 'kuesionerKegiatanDetailJawabanView');
     });

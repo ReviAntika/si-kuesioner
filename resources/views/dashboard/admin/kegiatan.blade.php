@@ -10,7 +10,7 @@
 
       <div class="container">
           <!-- Button trigger modal -->
-          
+
         <div class="row gy-2 justify-content-center" data-aos="fade-up">
 
             <div class="d-flex justify-content-end">
@@ -24,7 +24,7 @@
                     <th scope="col">No</th>
                     <th scope="col">Tahun</th>
                     <th scope="col">Tanggal Acara</th>
-                    <th scope="col">Organisasi</th>
+                    <th scope="col">Penyelenggara</th>
                     <th scope="col">Kegiatan</th>
                     <th scope="col">Status</th>
                     <th scope="col">Isi Kuesioner</th>
@@ -33,8 +33,8 @@
                 <tbody>
                     @if ($data != null)
                         @foreach ($data as $item)
-                        <?php 
-                            $no=1; 
+                        <?php
+                            $no=1;
                             $tglAwal = \Carbon\Carbon::parse($item->dari_tgl)->format('d F Y');
                             $tglAkhir = \Carbon\Carbon::parse($item->sampai_tgl)->format('d F Y');
                         ?>
@@ -85,14 +85,14 @@
                                 <input type="date" class="form-control" id="tgl_acara" name="sampai_tgl" rows="3">
                             </div>
                             <div class="mb-3">
-                                <label for="organisasi" class="form-label">Organisasi</label>
+                                <label for="organisasi" class="form-label">Penyelenggara</label>
                                 <input type="text" class="form-control" id="organisasi" name="organisasi" rows="3">
                             </div>
                             <div class="mb-3">
                                 <label for="kegiatan" class="form-label">Kegiatan</label>
                                 <input type="text" class="form-control" id="kegiatan" name="kegiatan" rows="3">
                             </div>
-                        
+
                     </div>
                 </div>
                 <div class="modal-footer">

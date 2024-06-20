@@ -7,6 +7,10 @@ use App\Models\AdminKuesionerService;
 use App\Models\Tambahan;
 use Carbon\Carbon;
 
+use App\Models\Kegiatan;
+use App\Models\Jawaban;
+use App\Models\Pertanyaan;
+
 class AdminController extends Controller
 {
     private $service;
@@ -28,20 +32,63 @@ class AdminController extends Controller
         ]);
     }
     public function kuesionerKegiatanHasilView() {
-        $tambah = new Tambahan();
+        $kegiatan = Kegiatan::all();
 
-        $listKuesionerKegiatan =$tambah->getListKuesionerKegiatanWithPertanyaan();
-        dd($listKuesionerKegiatan);
-        $idkegiatan=0;
-        $respons = $tambah->get();
+        foreach ($kegiatan as $index => $item) {
+            $totalResponden = Jawaban::where('kegiatan_id', $item['id'])
+                ->get()
+                ->groupBy('nama_responden')
+                ->count();
 
-        // dd($listKuesionerKegiatan);
+            $item['total_responden'] = $totalResponden;
+            $kegiatan[$index] = $item;
+        }
 
         return view('dashboard.admin.h_kegiatan', [
             'title' => 'Kuesioner Kegiatan',
-            'data' => $listKuesionerKegiatan,
+            'data' => $kegiatan,
         ]);
     }
+
+    public function kuesionerKegiatanListRespondenView($idKegiatan) {
+        $respondenKegiatan = Jawaban::where('kegiatan_id', $idKegiatan)
+            ->select('id', 'kegiatan_id', 'nama_responden')
+            ->get()
+            ->groupBy('nama_responden');
+        $kegiatan = Kegiatan::where('id', $idKegiatan)->first();
+
+        return view('dashboard.admin.list_responden', [
+            'title' => 'List Responden Hasil Kegiatan',
+            'data' => [
+                'responden' => $respondenKegiatan,
+                'kegiatan' => $kegiatan
+            ]
+        ]);
+    }
+
+    public function kuesionerKegiatanDetailJawabanView ($responden, $idKegiatan) {
+        // Dapatkan data responden kegiatan
+        $respondenKegiatan = Jawaban::where('nama_responden', $responden)
+                                    ->where('kegiatan_id', $idKegiatan)
+                                    ->get();
+        $jawabanDenganPertanyaan = [];
+        foreach ($respondenKegiatan as $jawaban) {
+            $pertanyaan = Pertanyaan::find($jawaban->pertanyaan_id);
+            $jawabanDenganPertanyaan[] = [
+                'pertanyaan' => $pertanyaan->teks_pertanyaan,
+                'jawaban' => $jawaban->teks_jawaban,
+            ];
+        }
+
+        dd($jawabanDenganPertanyaan);
+
+        return view('dashboard.admin.detail_jawaban', [
+            'title' => 'Detail Jawaban Hasil Kegiatan',
+            'jawabanDenganPertanyaan' => $jawabanDenganPertanyaan,
+        ]);
+    }
+
+
 
         /**
      * ini buat tambah data kegiatan
@@ -71,7 +118,7 @@ class AdminController extends Controller
     public function kuesionerKegiatanPertanyaan() {
         $tambah = new Tambahan();
 
-        $lihatPertanyaan =$tambah->getListKuesionerKegiatanPertanyaan();
+        $lihatPertanyaan = $tambah->getListKuesionerKegiatanPertanyaan();
 
         // dd($lihatPertanyaan);
 
