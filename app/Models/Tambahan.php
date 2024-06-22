@@ -50,11 +50,12 @@ class Tambahan extends Model
     public function UpdateKuesionerKegiatanPertanyaan($id,$data) {
         return DB::table('tb_pertanyaan')->where('id',$id)->update($data);
     }
-    public function sendSaranKegiatan($saran, $kegiatanId)
+    public function sendSaranKegiatan($saran, $kegiatanId, $namaResponden)
     {
         $payload = [
             'id_kegiatan'=> $kegiatanId,
-            'saran'=> $saran
+            'saran'=> $saran,
+            'nama_responden' => $namaResponden
         ];
         DB::table('tb_saran')->insert($payload);
         return 'sukses';

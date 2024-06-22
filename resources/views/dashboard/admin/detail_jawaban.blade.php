@@ -11,44 +11,74 @@
   <div class="container">
 
     <div class="row gy-2 justify-content-center" data-aos="fade-up">
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
-              <tr>
-                <th scope="col">No</th>
-                <th scope="col">Pertanyaan</th>
-                <th scope="col">SS</th>
-                <th scope="col">S</th>
-                <th scope="col">N</th>
-                <th scope="col">TS</th>
-                <th scope="col">STS</th>
-              </tr>
+                <tr>
+                    <th scope="col" style="background-color: green!important; color: white;">No.</th>
+                    <th scope="col" style="background-color: green!important; color: white; text-align: center;">Pertanyaan</th>
+                    <th scope="col" style="background-color: green!important; color: white;">SS</th>
+                    <th scope="col" style="background-color: green!important; color: white;">S</th>
+                    <th scope="col" style="background-color: green!important; color: white;">N</th>
+                    <th scope="col" style="background-color: green!important; color: white;">TS</th>
+                    <th scope="col" style="background-color: green!important; color: white;">STS</th>
+                </tr>
             </thead>
             <tbody>
-                {{-- @if (array_key_exists('responden', $data) and array_key_exists('kegiatan', $data))
-                     @foreach ($data['responden'] as $key => $item)
-                    <?php
-                        // $tglAwal = \Carbon\Carbon::parse($data['kegiatan']['dari_tgl'])->format('d F Y');
-                        // $tglAkhir = \Carbon\Carbon::parse($data['kegiatan']['sampai_tgl'])->format('d F Y');
-                    ?>
+                @if (count($data) > 0)
+                     @foreach ($data as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $data['kegiatan']['tahun'] }}</td>
-                        <td>{{ $key }}</td>
-                        <td>{{ $tglAwal . ' - ' .$tglAkhir }}</td>
-                        <td>{{ $data['kegiatan']['penyelenggara'] }}</td>
-                        <td>{{ $data['kegiatan']['kegiatan'] }}</td>
+                        <td>{{ $item['pertanyaan'] }}</td>
                         <td>
-                            <a href="/admin/kuesioner/kegiatan/hasil/{{$key}}/{{$data['kegiatan']['id']}}" class="btn btn-primary">Lihat Jawaban</a>
+                            @if ($item['jawaban'] == 'SS')
+                                <input type="radio" value="SS" disabled checked>
+                            @else
+                                <input type="radio" value="SS" disabled>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($item['jawaban'] == 'S')
+                                <input type="radio" value="S" disabled checked>
+                            @else
+                                <input type="radio" value="S" disabled>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($item['jawaban'] == 'N')
+                                <input type="radio" value="N" disabled checked>
+                            @else
+                                <input type="radio" value="N" disabled>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($item['jawaban'] == 'TS')
+                                <input type="radio" value="TS" disabled checked>
+                            @else
+                                <input type="radio" value="TS" disabled>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($item['jawaban'] == 'STS')
+                                <input type="radio" value="STS" disabled checked>
+                             @else
+                                <input type="radio" value="STS" disabled>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
+
                 @else
                 <tr>
                     <td colspan="7" class="text-center">No data available.</td>
                 </tr>
-                @endif --}}
+                @endif
             </tbody>
         </table>
+        <div class="form-floating shadow-lg p-3 mb-3 bg-body-tertiary rounded">
+            <textarea class="form-control" placeholder="" id="saran" style="height: 200px"readonly>{{$saran['saran']}}</textarea>
+            <label for="floatingTextarea2">Saran pengembangan Kegiatan</label>
+        </div>
+
     </div>
   </div>
 </section>

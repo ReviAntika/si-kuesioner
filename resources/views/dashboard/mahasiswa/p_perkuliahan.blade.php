@@ -58,7 +58,7 @@
                         @if ($list_pertanyaan['status'] == 'success')
                             @foreach ($list_pertanyaan['data']['kuesioner']['list_pertanyaan'] as $key => $item)
                                 <tr>
-                                    <td colspan="7" class="bg-primary">{{ $key }}</td>
+                                    <td colspan="7" class="bg-primary text-white">{{ $key }}</td>
                                 </tr>
                                 @foreach ($item as $index => $pertanyaan)
                                 <tr>
@@ -157,7 +157,7 @@
                     },
                     success: (response) => {
                         const id = response.data.kuesioner.kuesioner_perkuliahan_mahasiswa_id;
-                        window.location.href = '/kuesioner/perkuliahan/saran/' + id;
+                        window.location.href = '/kuesioner/perkuliahan/saran/' + id ;
                     },
                     error: (xhr) => {
                         console.log(xhr);

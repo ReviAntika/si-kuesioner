@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\Kegiatan;
 use App\Models\Jawaban;
 use App\Models\Pertanyaan;
+use App\Models\Saran;
 
 class AdminController extends Controller
 {
@@ -22,7 +23,7 @@ class AdminController extends Controller
     public function kuesionerPerkuliahanView()
     {
         $listTahunAjaran = $this->service->getTahunAjaranKuesionerPerkuliahan()->getData('data');
-        
+
         // dd($listTahunAjaran);
         return view('dashboard.admin.perkuliahan', [
             'title' => 'Kuesioner Perkuliahan',
@@ -34,7 +35,7 @@ class AdminController extends Controller
     {
         $listData = $this->service->getMatkulForKuesionerPerkuliahan($tahunId, $jenisMahasiswa, $kodeKampus)->getData('data');
         $listDataByTahunAjaran = $listData['data']['matakuliah'];
-        
+
         return $listDataByTahunAjaran;
     }
 
@@ -55,7 +56,7 @@ class AdminController extends Controller
 
 
 
-    // CONTROLLER FOR KEGIATAN 
+    // CONTROLLER FOR KEGIATAN
 
     public function kuesionerKegiatanView() {
         $tambah = new Tambahan();
@@ -109,20 +110,26 @@ class AdminController extends Controller
         $respondenKegiatan = Jawaban::where('nama_responden', $responden)
                                     ->where('kegiatan_id', $idKegiatan)
                                     ->get();
+        $saran = Saran::where('nama_responden', $responden)
+                ->where('id_kegiatan', $idKegiatan)
+                ->first();
+                // dd($saran);
         $jawabanDenganPertanyaan = [];
-        foreach ($respondenKegiatan as $jawaban) {
-            $pertanyaan = Pertanyaan::find($jawaban->pertanyaan_id);
+        foreach ($respondenKegiatan as $row) {
+            $item = Pertanyaan::find($row->pertanyaan_id);
+
             $jawabanDenganPertanyaan[] = [
-                'pertanyaan' => $pertanyaan->teks_pertanyaan,
-                'jawaban' => $jawaban->teks_jawaban,
+                'pertanyaan' => $item->pertanyaan,
+                'jawaban' => $row->jawaban,
             ];
         }
 
-        dd($jawabanDenganPertanyaan);
+        // dd($saran);
 
         return view('dashboard.admin.detail_jawaban', [
             'title' => 'Detail Jawaban Hasil Kegiatan',
-            'jawabanDenganPertanyaan' => $jawabanDenganPertanyaan,
+            'data' => $jawabanDenganPertanyaan,
+            'saran' => $saran,
         ]);
     }
 
@@ -173,6 +180,20 @@ class AdminController extends Controller
             $data =['pertanyaan'=>$request->pertanyaan];
             $tambah->UpdateKuesionerKegiatanPertanyaan($id,$data);
             return redirect()->back()->with('success','Data Berhasil Di Edit');
+
+        }else{
+            abort(403);
+        }
+    }
+    public function kuesionerPerkuliahanPertanyaanEdit(Request $request) {
+        $pertanyaanId = $request->idPertanyaan;
+        $jenisPertanyaanId = $request->idJenisPertanyaan;
+        $kelompokPertanyaanId = $request->idKelompokPertanyaan;
+        $pertanyaan = $request->pertanyaan;
+        if ($request->idPertanyaan != null) {
+            // dd('masuk');
+           $result =  $this->service->editPertanyaan($pertanyaanId,$kelompokPertanyaanId,$jenisPertanyaanId,$pertanyaan);
+            return redirect()->route('showPertanyaan');
 
         }else{
             abort(403);

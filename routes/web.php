@@ -70,9 +70,9 @@ Route::controller(MahasiswaController::class)
     ->group(function () {
         Route::get('/kegiatan', 'getKegiatanView');
         Route::get('/kegiatan/{id}', 'getPertanyaanKegiatanView');
-        Route::post('/kegiatan/kirim/{id}', 'addJawabanKegiatan');
-        Route::get('/kegiatan/saran/{id}', 'saranKegiatanView')->name('saranKegiatan');
-        Route::post('/kegiatan/saran/kirim/{id}', 'addSaranKegiatan');
+        Route::post('/kegiatan/kirim/{id}/{nm}', 'addJawabanKegiatan');
+        Route::get('/kegiatan/saran/{id}/{nm}', 'saranKegiatanView')->name('saranKegiatan');
+        Route::post('/kegiatan/saran/kirim/{id}/', 'addSaranKegiatan');
     });
 
 Route::controller(AdminController::class)
@@ -88,12 +88,14 @@ Route::controller(AdminController::class)
         Route::get('/kegiatan/pertanyaan', 'kuesionerKegiatanPertanyaan');
         Route::post('/kegiatan/pertanyaan/edit', 'kuesionerKegiatanPertanyaanEdit');
         Route::get('/kegiatan/hasil/list_responden/{id}', 'kuesionerKegiatanListRespondenView');
-        Route::get('/kegiatan/hasil/list_responden/{responden}/{kegiatan_id}', 'kuesionerKegiatanDetailJawabanView');
+        Route::get('/kegiatan/hasil/list_responden/detail_jawaban/{responden}/{kegiatan_id}', 'kuesionerKegiatanDetailJawabanView');
 
 
         // ROUTE PERKULIAHAN
-        
+
         Route::get('/perkuliahan', 'kuesionerPerkuliahanView');
         Route::post('/perkuliahan/tahun-ajaran/{kdTahun}/{jnsMhs}/{kd_kampus}', 'kuesionerPerkuliahanViewTahun');
-        Route::get('/perkuliahan/pertanyaan/show', 'getPertanyaanView');
+        Route::get('/perkuliahan/pertanyaan/show', 'getPertanyaanView')->name('showPertanyaan');
+        Route::post('/perkuliahan/pertanyaan/edit', 'kuesionerPerkuliahanPertanyaanEdit');
+
     });

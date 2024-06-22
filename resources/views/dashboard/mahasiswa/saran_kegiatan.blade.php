@@ -13,6 +13,7 @@
                 <div class="row justify-content-center" data-aos="fade-up">
                     @csrf
                     <input type="hidden" name="kuesioner_perkuliahan_mahasiswa_id" value="{{ $data['kuesioner_saran_kegiatan_id'] }}">
+                    <input type="hidden" name="kuesioner_kegiatan_mahasiswa_nama" value="{{ $data['kuesioner_saran_kegiatan_nmResponden'] }}">
 
                     <div class="form-floating shadow-lg p-3 mb-3 bg-body-tertiary rounded">
                         <textarea class="form-control" placeholder="" id="saran" style="height: 200px"></textarea>
@@ -34,7 +35,10 @@
             $('#buttonKirimSaran').on('click', () => {
                 const saran = $('#saran').val();
                 const id = $('input[name="kuesioner_perkuliahan_mahasiswa_id"]').val();
+                const nmResponden = $('input[name="kuesioner_kegiatan_mahasiswa_nama"]').val();
                 const token = $('input[name="_token"]').val();
+
+                console.log(nmResponden);
 
                 $.ajax({
                     url: '/kuesioner/kegiatan/saran/kirim/' + id,
@@ -44,6 +48,7 @@
                         _method: 'POST',
                         id: id,
                         saran: saran,
+                        nmResponden : nmResponden,
                     },
                     beforeSend: () => {
                         $.LoadingOverlay('show');
