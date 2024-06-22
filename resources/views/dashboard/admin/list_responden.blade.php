@@ -38,7 +38,7 @@
                         <td>{{ $data['kegiatan']['penyelenggara'] }}</td>
                         <td>{{ $data['kegiatan']['kegiatan'] }}</td>
                         <td>
-                            <a href="/admin/kuesioner/kegiatan/hasil/list_reponden/detail_jawaban/{{$key}}/{{$data['kegiatan']['id']}}" class="btn btn-primary">Lihat Jawaban</a>
+                            <a href="/admin/kuesioner/kegiatan/hasil/list_responden/detail_jawaban/{{$key}}/{{$data['kegiatan']['id']}}" class="btn btn-primary">Lihat Jawaban</a>
                         </td>
                     </tr>
                     @endforeach

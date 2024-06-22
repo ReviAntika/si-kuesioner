@@ -22,11 +22,11 @@
                         <tr>
                             <th scope="col" style="background-color: green!important; color: white;">No.</th>
                             <th scope="col" style="background-color: green!important; color: white; text-align: center;">Pertanyaan</th>
-                            <th scope="col" style="background-color: green!important; color: white;">SS</th>
+                            {{-- <th scope="col" style="background-color: green!important; color: white;">SS</th>
                             <th scope="col" style="background-color: green!important; color: white;">S</th>
                             <th scope="col" style="background-color: green!important; color: white;">N</th>
                             <th scope="col" style="background-color: green!important; color: white;">TS</th>
-                            <th scope="col" style="background-color: green!important; color: white;">STS</th>
+                            <th scope="col" style="background-color: green!important; color: white;">STS</th> --}}
                             <th scope="col" style="background-color: green!important; color: white; text-align:center;">Edit</th>
                         </tr>
                     </thead>
@@ -40,13 +40,15 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $pertanyaan->pertanyaan }}</td>
 
-                                @foreach ($data['pilihan'] as $pilihan)
+                                {{-- @foreach ($data['pilihan'] as $pilihan)
                                     <td>
                                         <input type="radio" name="pertanyaan_{{ $pertanyaan->id }}" value="{{ $pilihan->kd_point }}">
                                     </td>
-                                @endforeach
+                                @endforeach --}}
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btnModalEditPertanyaan" data-bs-target="#modalKegiatanPertanyaan" data-idPertanyaan="{{$pertanyaan->id}} " data-pertanyaan="{{$pertanyaan->pertanyaan}}">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btnModalEditPertanyaan" data-bs-target="#modalKegiatanPertanyaan"
+                                        data-idPertanyaan="{{$pertanyaan->id}}"
+                                        data-pertanyaan="{{$pertanyaan->pertanyaan}}">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
                                 </td>

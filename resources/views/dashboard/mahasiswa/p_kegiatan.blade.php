@@ -19,7 +19,7 @@
                     <div class="card-body">
                         @if (session()->has('token'))
                         <input type="hidden" id="nama" name="nama" value="{{ session('profile')['nama'] }}">
-                        
+
                         @else
                         <div class="mb-3 row">
                             <label for="nama" class="col-sm-1 col-form-label"><strong>Nama:</strong></label>
@@ -158,7 +158,7 @@
                 console.log(payload);
 
                 $.ajax({
-                    url: '/kuesioner/kegiatan/kirim/' + IdKegiatan,
+                    url: '/kuesioner/kegiatan/kirim/' + IdKegiatan +'/' + namaResponden,
                     type: 'POST',
                     data: payload,
 
@@ -168,7 +168,7 @@
                     },
                     success: (response) => {
                         console.log('berhasil'+ namaResponden);
-                        window.location.href = '/kuesioner/kegiatan/saran/' + IdKegiatan;
+                        window.location.href = '/kuesioner/kegiatan/saran/' + IdKegiatan +'/'+ namaResponden;
                     },
                     error: (xhr) => {
                         console.log(xhr);

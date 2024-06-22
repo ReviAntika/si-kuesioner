@@ -86,29 +86,30 @@ class MahasiswaController extends Controller
         ]);
     }
 
-    public function addJawabanKegiatan(Request $request, $id) {
+    public function addJawabanKegiatan(Request $request, $id,$nm) {
         // dd($request->all());
         $dataKegiatan = new Tambahan();
-
         $dataKegiatan->sendJawabanKuesionerKegiatan(
             $request->nama_responden, $request->kegiatan_id, $request->list_jawaban
         );
 
-        return redirect('/kuesioner/kegiatan/saran/'.$id)->with('idKegiatan', $id);
+        return redirect('/kuesioner/kegiatan/saran/'.$id.'/'.$nm)->with('idKegiatan', $id);
     }
 
-    public function saranKegiatanView($idKegiatan) {
+    public function saranKegiatanView($idKegiatan,$nmResponden) {
+        // dd($nmResponden);
         return view('dashboard.mahasiswa.saran_kegiatan', [
             'title' => 'Kuesioner Kegiatan',
             'data' => [
-                'kuesioner_saran_kegiatan_id' => $idKegiatan
+                'kuesioner_saran_kegiatan_id' => $idKegiatan,
+                'kuesioner_saran_kegiatan_nmResponden' => $nmResponden,
             ],
         ]);
     }
 
     public function addSaranKegiatan(Request $request) {
         $dataKegiatan = new Tambahan();
-        $result = $dataKegiatan->sendSaranKegiatan($request->saran, $request->id);
+        $result = $dataKegiatan->sendSaranKegiatan($request->saran, $request->id , $request->nmResponden);
 
         return $result;
     }

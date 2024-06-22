@@ -129,12 +129,14 @@ class AdminKuesionerService extends MyWebService
      * digunakan untuk mengubah pertanyaan yang sudah ada
      */
     public function editPertanyaan($pertanyaanId, $jenisPertanyaanId, $kelompokPertanyaanId, $pertanyaan) {
+
         $payload = [
             'pertanyaan_id' => $pertanyaanId,
             'jenis_pertanyaan_id' => $jenisPertanyaanId,
             'kelompok_pertanyaan_id' => $kelompokPertanyaanId,
             'pertanyaan' => $pertanyaan,
         ];
+        // dd($payload);
 
         return $this->put($payload, '/pertanyaan/edit');
     }
