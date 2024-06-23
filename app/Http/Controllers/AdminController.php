@@ -49,6 +49,16 @@ class AdminController extends Controller
         ]);
     }
 
+    public function kuesionerPerkulihanHasilView()
+    {
+        $listTahunAjaran = $this->service->getTahunAjaranKuesionerPerkuliahan()->getData('data');
+
+        // dd($listTahunAjaran);
+        return view('dashboard.admin.h_perkuliahan', [
+            'title' => 'Kuesioner Hasil Perkuliahan',
+            'data' => $listTahunAjaran,
+        ]);
+    }
 
 
 
@@ -198,6 +208,28 @@ class AdminController extends Controller
         }else{
             abort(403);
         }
+    }
+
+    public function GraphChartKegiatanByTahun($tahun)
+    {
+        $data = Kegiatan::where('tahun',$tahun)->get(['id','kegiatan','penyelenggara']);
+        
+        $isiData = [];
+        $lebel =[];
+        $datajawaban=[];
+        
+        foreach ($data as $key => $value) {
+            $datajawaban = Jawaban::where('kegiatan_id',$value->id)->get()->groupBy('nama_responden')->count();
+            $jawaban [] = $datajawaban;
+            $isiData[] =$value->kegiatan;
+            $lebel[]=$value->penyelenggara;
+        };
+        // dd($datajawaban);
+        return [
+            'status'=> 'success',
+            'acara' => $isiData ,
+            'penye' => $lebel,
+            'jawaban' =>$jawaban];
     }
 
 }

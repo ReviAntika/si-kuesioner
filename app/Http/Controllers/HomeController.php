@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminKuesionerService;
+use App\Models\Kegiatan;
 use App\Models\MahasiswaKuesionerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -29,7 +30,9 @@ class HomeController extends Controller
             /**
              * jika yang login adalah admin
              */
-            $data = 'Admin';
+            $tahun = Kegiatan::groupBy('tahun')->get('tahun');
+            $data =['Admin','tahun'=>$tahun];
+            // dd($data);
         } else{
                /**
              * jika tidak Login
