@@ -89,7 +89,11 @@ Route::controller(AdminController::class)
         Route::post('/kegiatan/pertanyaan/edit', 'kuesionerKegiatanPertanyaanEdit');
         Route::get('/kegiatan/hasil/list_responden/{id}', 'kuesionerKegiatanListRespondenView');
         Route::get('/kegiatan/hasil/list_responden/detail_jawaban/{responden}/{kegiatan_id}', 'kuesionerKegiatanDetailJawabanView');
+
         Route::post('/kegiatan/graph/tahun-ajaran/{tahun}', 'GraphChartKegiatanByTahun');
+
+
+        Route::get('/export/{id}', 'export')->name('export');
 
 
         // ROUTE PERKULIAHAN
