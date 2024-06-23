@@ -4,7 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+
     "content-hash": "ac393f78fc49571b6b8a332e6c7a3a03",
+
     "packages": [
         {
             "name": "brick/math",
@@ -2795,6 +2797,7 @@
             "time": "2023-02-08T01:06:31+00:00"
         },
         {
+
             "name": "phpoffice/phpexcel",
             "version": "1.8.1",
             "source": {
@@ -2857,6 +2860,7 @@
             "time": "2015-05-01T07:00:55+00:00"
         },
         {
+
             "name": "phpoffice/phpspreadsheet",
             "version": "1.29.0",
             "source": {
