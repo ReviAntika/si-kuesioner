@@ -234,11 +234,11 @@ class AdminController extends Controller
     public function GraphChartKegiatanByTahun($tahun)
     {
         $data = Kegiatan::where('tahun',$tahun)->get(['id','kegiatan','penyelenggara']);
-        
+
         $isiData = [];
         $lebel =[];
         $datajawaban=[];
-        
+
         foreach ($data as $key => $value) {
             $datajawaban = Jawaban::where('kegiatan_id',$value->id)->get()->groupBy('nama_responden')->count();
             $jawaban [] = $datajawaban;
@@ -275,8 +275,37 @@ class AdminController extends Controller
         $sheet->setCellValue('E1', 'Penyelenggara');
         $sheet->setCellValue('F1', 'Kegiatan');
 
+        // Gaya untuk header
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FFFF00', // Background color
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A1:F1')->applyFromArray($headerStyle);
+
         // Mulai dari baris kedua
         $row = 2;
+
+        // Gaya untuk sel
+        $cellStyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
 
         foreach ($respondenKegiatan as $responden) {
             $sheet->setCellValue('A' . $row, $kegiatan->id);
@@ -285,6 +314,8 @@ class AdminController extends Controller
             $sheet->setCellValue('D' . $row, $kegiatan->dari_tgl . ' - ' . $kegiatan->sampai_tgl);
             $sheet->setCellValue('E' . $row, $kegiatan->penyelenggara);
             $sheet->setCellValue('F' . $row, $kegiatan->kegiatan);
+
+            $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray($cellStyle);
 
             // Increment baris
             $row++;
@@ -305,6 +336,7 @@ class AdminController extends Controller
         // Hentikan eksekusi kode setelah menyimpan file
         exit();
     }
+
 
 
 }
