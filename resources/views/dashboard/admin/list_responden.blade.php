@@ -11,6 +11,9 @@
   <div class="container">
 
     <div class="row gy-2 justify-content-center" data-aos="fade-up">
+        <div style="text-align:end;">
+            <button class="btn btn-success" onclick="excel()">Export</button>
+        </div>
         <table class="table">
             <thead>
               <tr>
@@ -53,3 +56,9 @@
   </div>
 </section>
 @endsection
+<script>
+function excel() {
+    var idKegiatan = '{{ $data['kegiatan']['id'] }}';
+    window.location.href = "/admin/kuesioner/export/" + idKegiatan;
+}
+</script>
