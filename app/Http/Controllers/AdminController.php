@@ -11,6 +11,8 @@ use App\Models\Kegiatan;
 use App\Models\Jawaban;
 use App\Models\Pertanyaan;
 use App\Models\Saran;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class AdminController extends Controller
 {
@@ -48,11 +50,6 @@ class AdminController extends Controller
             'list_pertanyaan' => $listPertanyaan
         ]);
     }
-
-
-
-
-
 
 
 
@@ -199,6 +196,59 @@ class AdminController extends Controller
             abort(403);
         }
     }
+
+    public function export($idKegiatan)
+    {
+        $kegiatan = Kegiatan::findOrFail($idKegiatan);
+
+        // Ambil semua data responden dari tabel Jawaban berdasarkan idKegiatan
+        $respondenKegiatan = Jawaban::where('kegiatan_id', $idKegiatan)
+            ->get()
+            ->unique('nama_responden');
+
+        // Membuat objek Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Menambahkan data ke worksheet
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Tahun');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Tanggal Acara');
+        $sheet->setCellValue('E1', 'Penyelenggara');
+        $sheet->setCellValue('F1', 'Kegiatan');
+
+        // Mulai dari baris kedua
+        $row = 2;
+
+        foreach ($respondenKegiatan as $responden) {
+            $sheet->setCellValue('A' . $row, $kegiatan->id);
+            $sheet->setCellValue('B' . $row, $kegiatan->tahun);
+            $sheet->setCellValue('C' . $row, $responden->nama_responden);
+            $sheet->setCellValue('D' . $row, $kegiatan->dari_tgl . ' - ' . $kegiatan->sampai_tgl);
+            $sheet->setCellValue('E' . $row, $kegiatan->penyelenggara);
+            $sheet->setCellValue('F' . $row, $kegiatan->kegiatan);
+
+            // Increment baris
+            $row++;
+        }
+
+        // Mengatur judul file dan format
+        $filename = 'kegiatan.xlsx';
+
+        // Mengatur header untuk file Excel
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        // Menggunakan Writer untuk menyimpan file
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+
+        // Hentikan eksekusi kode setelah menyimpan file
+        exit();
+    }
+
 
 }
 
