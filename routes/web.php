@@ -89,19 +89,20 @@ Route::controller(AdminController::class)
         Route::post('/kegiatan/pertanyaan/edit', 'kuesionerKegiatanPertanyaanEdit');
         Route::get('/kegiatan/hasil/list_responden/{id}', 'kuesionerKegiatanListRespondenView');
         Route::get('/kegiatan/hasil/list_responden/detail_jawaban/{responden}/{kegiatan_id}', 'kuesionerKegiatanDetailJawabanView');
-
+        Route::get('/kegiatan/chart','kuesionerKegiatanChartView');
         Route::post('/kegiatan/graph/tahun-ajaran/{tahun}', 'GraphChartKegiatanByTahun');
-
-
+        
+        
         Route::get('/export/{id}', 'export')->name('export');
-
-
+        
+        
         // ROUTE PERKULIAHAN
-
+        
         Route::get('/perkuliahan', 'kuesionerPerkuliahanView');
         Route::get('/perkuliahan/hasil', 'kuesionerPerkulihanHasilView');
         Route::post('/perkuliahan/tahun-ajaran/{kdTahun}/{jnsMhs}/{kd_kampus}', 'kuesionerPerkuliahanViewTahun');
         Route::get('/perkuliahan/pertanyaan/show', 'getPertanyaanView')->name('showPertanyaan');
         Route::post('/perkuliahan/pertanyaan/edit', 'kuesionerPerkuliahanPertanyaanEdit');
+        Route::get('/perkuliahan/chart','kuesionerPerkuliahanChartView');
 
     });
