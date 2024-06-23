@@ -30,8 +30,7 @@ class HomeController extends Controller
             /**
              * jika yang login adalah admin
              */
-            $tahun = Kegiatan::groupBy('tahun')->get('tahun');
-            $data =['Admin','tahun'=>$tahun];
+            $data =['Admin'];
             // dd($data);
         } else{
                /**

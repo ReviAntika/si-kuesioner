@@ -31,6 +31,8 @@
             <ul>
               <li><a href="/admin/kuesioner/perkuliahan/hasil">Perkuliahan</a></li>
               <li><a href="/admin/kuesioner/kegiatan/hasil">Kegiatan</a></li>
+              <li><a href="/admin/kuesioner/perkuliahan/chart">Chart Perkuliahan</a></li>
+              <li><a href="/admin/kuesioner/kegiatan/chart">Chart Kegiatan</a></li>
             </ul>
           </li>
           @else

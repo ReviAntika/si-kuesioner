@@ -62,6 +62,18 @@ class AdminController extends Controller
         ]);
     }
 
+    public function kuesionerPerkuliahanChartView() {
+
+        $tahun = $this->service->getTahunAjaranKuesionerPerkuliahan()->getData('data');
+
+        // dd($listKuesionerKegiatan);
+
+        return view('dashboard.admin.c_perkuliahan', [
+            'title' => 'Kuesioner Kegiatan',
+            'data' => $tahun,
+        ]);
+    }
+
 
     // CONTROLLER FOR KEGIATAN
 
@@ -207,6 +219,17 @@ class AdminController extends Controller
         }
     }
 
+    public function kuesionerKegiatanChartView() {
+
+        $tahun = Kegiatan::groupBy('tahun')->get('tahun');
+
+        // dd($listKuesionerKegiatan);
+
+        return view('dashboard.admin.c_kegiatan', [
+            'title' => 'Kuesioner Kegiatan',
+            'tahun' => $tahun,
+        ]);
+    }
 
     public function GraphChartKegiatanByTahun($tahun)
     {
