@@ -17,7 +17,7 @@
                         <div class="col-md-4">
                             <form action="">
                                 @csrf
-                                <div class="form-group">    
+                                <div class="form-group">
                                     <select name="cariTahun" id="cariTahun" class="form-control">
                                         <option value="">Select Tahun Ajaran</option>
                                         @foreach ($tahun as $item)
@@ -42,25 +42,33 @@
                         </div>
                     </div>
                 </div>
+                @foreach ($kegiatan as $item)
+                <div class="container" id="kegiatan{{$item->kegiatan}}"></div>
+                @endforeach
+
         </div>
       </div>
     </section>
 <script>
-    
+var chartBar;
     $("#btnCariTahun").click(function(){
+
         const token = $('input[name="_token"]').val();
         var tahun = $("#cariTahun").val();
+
         // console.log(jns_mhs);
         $.ajax({
             type: 'POST',
             url: "/admin/kuesioner/kegiatan/graph/tahun-ajaran/" + tahun ,
             data: {_token: token},
             success: function(response,xhr,rows) {
-                // console.log(response);
-                const ctx = document.getElementById('kegiatanChart');
-  
-                new Chart(ctx, {
-                    destroy:true,
+                // console.log(rows);
+                const ctx = document.getElementById('kegiatanChart').getContext('2d');
+
+                if (chartBar) {
+                    chartBar.destroy();
+                }
+                chartBar = new Chart(ctx, {
                     type: 'bar',
                     data: {
                     labels: response.acara,
@@ -79,6 +87,28 @@
                     }
                 });
 
+                var apa =response.kegiatan;
+                var pilihan = response.pilihanJawaban;
+                for (i = 0; i < pilihan.length; i++) {
+                    for (j= 0; j < apa.length; j++) {
+                    // console.log(apa[i]);
+                    document.getElementById('kegiatan'+apa[i]).innerHTML="<div class='card'>"+
+                        "<div class='card-header'>KEGIATAN "+response.kegiatan[i]+"</div>"+
+                        "<div class='card-body'>"+
+                            "<div class='row'>"+
+                                "<div class='col-md-4' id='canvas"+response.kegiatan[i]+pilihan[j].kd_point+"'>"+
+                                    "<canvas id='kegiatanChartpie"+response.kegiatan[i]+pilihan[j].kd_point+"'></canvas>"+
+                                "</div>"+
+                            "</div>"+
+                        "</div>"+
+                    "</div>";
+                        // console.log(pilihan[j].kd_point;
+                    }
+                }
+                for (i = 0; i < response.kegiatan.length; i++) {
+                    // console.log(apa[i]);
+                    document.getElementById('kegiatanChartpie'+apa[i]).getContext('2d');
+                }
             }
         });
     });

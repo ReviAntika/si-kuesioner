@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\Kegiatan;
 use App\Models\Jawaban;
 use App\Models\Pertanyaan;
+use App\Models\PilihanJawaban;
 use App\Models\Saran;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -222,35 +223,47 @@ class AdminController extends Controller
     public function kuesionerKegiatanChartView() {
 
         $tahun = Kegiatan::groupBy('tahun')->get('tahun');
+        $kegiatan = Kegiatan::all();
 
-        // dd($listKuesionerKegiatan);
+        // dd($kegiatan);
 
         return view('dashboard.admin.c_kegiatan', [
             'title' => 'Kuesioner Kegiatan',
             'tahun' => $tahun,
+            'kegiatan' =>$kegiatan
         ]);
     }
 
     public function GraphChartKegiatanByTahun($tahun)
     {
-        $data = Kegiatan::where('tahun',$tahun)->get(['id','kegiatan','penyelenggara']);
-
+        $data = Kegiatan::where('tahun',$tahun)->get(['id','kegiatan','penyelenggara','kd_acara']);
+        $piliahan = PilihanJawaban::all();
+        $datajawabanSS = Jawaban::where('kegiatan_id',$data[0]->id)->get();
+// dd($datajawabanSS);
         $isiData = [];
         $lebel =[];
         $datajawaban=[];
+        $kegiatan=[];
+        $kdAcara=[];
 
         foreach ($data as $key => $value) {
             $datajawaban = Jawaban::where('kegiatan_id',$value->id)->get()->groupBy('nama_responden')->count();
             $jawaban [] = $datajawaban;
             $isiData[] =$value->kegiatan;
             $lebel[]=$value->penyelenggara;
+            $kegiatan[]=$value->kegiatan;
+            $kdAcara[]=$value->kd_acara;
         };
-        // dd($datajawaban);
+        // dd($kegiatan);
         return [
             'status'=> 'success',
             'acara' => $isiData ,
             'penye' => $lebel,
-            'jawaban' =>$jawaban];
+            'jawaban' =>$jawaban,
+            'kegiatan' => $kegiatan,
+            'kd_acara' => $kdAcara,
+            'pilihanJawaban' => $piliahan
+        ];
     }
 
 
