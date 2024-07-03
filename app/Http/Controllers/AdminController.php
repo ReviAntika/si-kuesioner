@@ -76,6 +76,33 @@ class AdminController extends Controller
         ]);
     }
 
+    public function HasilChartPerkuliahanView()
+    {
+        $data = [
+            "pertanyaan_dan_jawaban" => [
+                "Teknologi Pembelajaran" => [
+                    [
+                        "pertanyaan_id" => 1,
+                        "jenis_pertanyaan_id" => 1,
+                        "kelompok_pertanyaan_id" => 1,
+                        "kd_jenis_pertanyaan" => "P",
+                        "jenis" => "Perkuliahan",
+                        "kelompok" => "Teknologi Pembelajaran",
+                        "pertanyaan" => "Apakah seluruh proses perkuliahan telah memiliki aktivitas kelas pembelajaran online (Google Meet/Zoom/Discord) pada saat jam perkuliahan?",
+                        "jawaban" => [
+                            "point_id" => 4,
+                            "kd_point" => "S",
+                            "ket_point" => "Setuju",
+                            "mutu" => 4,
+                            "rata_rata" => 4
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        dd($data);
+    }
+
 
     // CONTROLLER FOR KEGIATAN
 
@@ -235,86 +262,86 @@ class AdminController extends Controller
         ]);
     }
 
-    // public function GraphChartKegiatanByTahun($tahun)
-    // {
-    //     $data = Kegiatan::where('tahun',$tahun)->get(['id','kegiatan','penyelenggara','kd_acara']);
-    //     $piliahan = PilihanJawaban::all();
-    //     $datajawabanSS = Jawaban::where('kegiatan_id',$data[0]->id)->get();
-    //     // dd($datajawabanSS);
-    //     $isiData = [];
-    //     $lebel =[];
-    //     $datajawaban=[];
-    //     $kegiatan=[];
-    //     $kdAcara=[];
-
-    //     foreach ($data as $key => $value) {
-    //         $datajawaban = Jawaban::where('kegiatan_id',$value->id)->get()->groupBy('nama_responden')->count();
-    //         $jawaban [] = $datajawaban;
-    //         $isiData[] =$value->kegiatan;
-    //         $lebel[]=$value->penyelenggara;
-    //         $kegiatan[]=$value->kegiatan;
-    //         $kdAcara[]=$value->kd_acara;
-    //     };
-    //     // dd($kegiatan);
-    //     return [
-    //         'status'=> 'success',
-    //         'acara' => $isiData ,
-    //         'penye' => $lebel,
-    //         'jawaban' =>$jawaban,
-    //         'kegiatan' => $kegiatan,
-    //         'kd_acara' => $kdAcara,
-    //         'pilihanJawaban' => $piliahan
-    //     ];
-    // }
-
     public function GraphChartKegiatanByTahun($tahun)
     {
-        $data = Kegiatan::where('tahun', $tahun)->get(['id', 'kegiatan', 'penyelenggara', 'kd_acara']);
-        $kegiatan = [];
-        $lebel = [];
-        $kdAcara = [];
-        $pieChartData = [];
-        $barChartData = [];
+        $data = Kegiatan::where('tahun',$tahun)->get(['id','kegiatan','penyelenggara','kd_acara']);
+        $pilihan = PilihanJawaban::all();
+        $datajawabanSS = Jawaban::where('kegiatan_id',$data[0]->id)->get();
+        // dd($datajawabanSS);
+        $isiData = [];
+        $lebel =[];
+        $datajawabanSS=[];
+        $kegiatan=[];
+        $kdAcara=[];
 
-        foreach ($data as $value) {
-            $kegiatan[] = $value->kegiatan;
-            $lebel[] = $value->penyelenggara;
-            $kdAcara[] = $value->kd_acara;
-
-            $dataJawaban = DB::table('tb_jawaban')
-            ->where('kegiatan_id', $value->id)
-            ->join('tb_pertanyaan', 'tb_pertanyaan.id', '=', 'tb_jawaban.pertanyaan_id')
-            ->join('tb_pilihan', 'tb_pilihan.kd_point', '=', 'tb_jawaban.jawaban')
-            ->select('tb_pertanyaan.pertanyaan', 'tb_jawaban.jawaban', 'tb_jawaban.pertanyaan_id')
-            ->get()
-            ->groupBy('pertanyaan_id');
-
-            foreach ($dataJawaban as $pertanyaanId => $jawaban) {
-                $pertanyaan = $jawaban->first()->pertanyaan;
-                $counts = $jawaban->groupBy('jawaban')->map->count();
-                $pieChartData[$value->kegiatan][$pertanyaanId] = [
-                    'pertanyaan' => $pertanyaan,
-                    'labels' => $counts->keys()->all(),
-                    'data' => $counts->values()->all(),
-                ];
-            }
-
-            $barChartData[] = DB::table('tb_jawaban')
-                ->where('kegiatan_id', 2)
-                ->get()
-                ->groupBy('nama_responden')
-                ->count();
-        }
-
+        foreach ($data as $key => $value) {
+            $datajawabanSS = Jawaban::where('kegiatan_id',$value->id)->get()->groupBy('nama_responden')->count();
+            $jawaban [] = $datajawabanSS;
+            $isiData[] =$value->kegiatan;
+            $lebel[]=$value->penyelenggara;
+            $kegiatan[]=$value->kegiatan;
+            $kdAcara[]=$value->kd_acara;
+        };
+        // dd($kegiatan);
         return [
-            'status' => 'success',
-            'kegiatan' => $kegiatan,
+            'status'=> 'success',
+            'acara' => $isiData ,
             'penye' => $lebel,
+            'jawaban' =>$jawaban,
+            'kegiatan' => $kegiatan,
             'kd_acara' => $kdAcara,
-            'pieChartData' => $pieChartData,
-            'barChartData' => $barChartData,
+            'pilihanJawaban' => $pilihan
         ];
     }
+
+    // public function GraphChartKegiatanByTahun($tahun)
+    // {
+    //     $data = Kegiatan::where('tahun', $tahun)->get(['id', 'kegiatan', 'penyelenggara', 'kd_acara']);
+    //     $kegiatan = [];
+    //     $lebel = [];
+    //     $kdAcara = [];
+    //     $pieChartData = [];
+    //     $barChartData = [];
+
+    //     foreach ($data as $value) {
+    //         $kegiatan[] = $value->kegiatan;
+    //         $lebel[] = $value->penyelenggara;
+    //         $kdAcara[] = $value->kd_acara;
+
+    //         $dataJawaban = DB::table('tb_jawaban')
+    //         ->where('kegiatan_id', $value->id)
+    //         ->join('tb_pertanyaan', 'tb_pertanyaan.id', '=', 'tb_jawaban.pertanyaan_id')
+    //         ->join('tb_pilihan', 'tb_pilihan.kd_point', '=', 'tb_jawaban.jawaban')
+    //         ->select('tb_pertanyaan.pertanyaan', 'tb_jawaban.jawaban', 'tb_jawaban.pertanyaan_id')
+    //         ->get()
+    //         ->groupBy('pertanyaan_id');
+
+    //         foreach ($dataJawaban as $pertanyaanId => $jawaban) {
+    //             $pertanyaan = $jawaban->first()->pertanyaan;
+    //             $counts = $jawaban->groupBy('jawaban')->map->count();
+    //             $pieChartData[$value->kegiatan][$pertanyaanId] = [
+    //                 'pertanyaan' => $pertanyaan,
+    //                 'labels' => $counts->keys()->all(),
+    //                 'data' => $counts->values()->all(),
+    //             ];
+    //         }
+
+    //         $barChartData[] = DB::table('tb_jawaban')
+    //             ->where('kegiatan_id', 2)
+    //             ->get()
+    //             ->groupBy('nama_responden')
+    //             ->count();
+    //     }
+
+    //     return [
+    //         'status' => 'success',
+    //         'kegiatan' => $kegiatan,
+    //         'penye' => $lebel,
+    //         'kd_acara' => $kdAcara,
+    //         'pieChartData' => $pieChartData,
+    //         'barChartData' => $barChartData,
+    //     ];
+    // }
 
 
     public function export($idKegiatan)
