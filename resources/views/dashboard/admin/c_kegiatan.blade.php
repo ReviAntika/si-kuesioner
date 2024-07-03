@@ -63,7 +63,6 @@
                     _token: token
                 },
                 success: function(response) {
-                    // Initialize Bar Chart
                     const ctxBar = document.getElementById('kegiatanChart').getContext('2d');
                     let chartBar;
 
@@ -78,7 +77,7 @@
                             datasets: [{
                                 label: 'CHART BAR KEGIATAN',
                                 data: response
-                                    .barChartData, // Using the barChartData from the response
+                                    .barChartData,
                                 borderWidth: 1
                             }]
                         },
@@ -91,7 +90,6 @@
                         }
                     });
 
-                    // Initialize Pie Charts
                     const kegiatan = response.kegiatan;
                     const pieChartData = response.pieChartData;
 
