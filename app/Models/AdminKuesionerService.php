@@ -144,5 +144,10 @@ class AdminKuesionerService extends MyWebService
     public function getPertanyaanKuesioner($jenisId) {
         return $this->get(null, "/pertanyaan?jenis_id=$jenisId");
     }
+    public function getJawabanHasilKuesioner()
+    {
+        return $this->get(null, "/perkuliahan/hasil/rata-rata?tahun_id=335&kelas_kuliah_ids=3092");
+
+    }
 
 }

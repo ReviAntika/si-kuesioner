@@ -25,11 +25,11 @@
                     <p>c. Jawaban yang Anda berikan dijamin kerahasiaannya, dan tidak berpengaruh terhadap nilai mata kuliah atau status Anda sebagai mahasiswa. Oleh karena itu, Anda diminta untuk memberikan penilaian secara sungguh-sungguh.</p>
                     <p>d. Kriteria bobot penilaian adalah sebagai berikut:</p>
                     <ul>
-                        <li>5 = Sangat Setuju: 81 - 100%</li>
-                        <li>4 = Setuju: 61 - 80%</li>
-                        <li>3 = Netral: 41 - 60%</li>
-                        <li>2 = Tidak Setuju: 21 - 40%</li>
-                        <li>1 = Sangat Tidak Setuju: 1 - 20%</li>
+                        <li>5 = Sangat Setuju</li>
+                        <li>4 = Setuju</li>
+                        <li>3 = Netral</li>
+                        <li>2 = Tidak Setuju</li>
+                        <li>1 = Sangat Tidak Setuju</li>
                     </ul>
                 </div>
             </div>
