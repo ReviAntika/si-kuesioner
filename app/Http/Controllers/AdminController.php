@@ -78,28 +78,17 @@ class AdminController extends Controller
 
     public function HasilChartPerkuliahanView()
     {
-        $data = [
-            "pertanyaan_dan_jawaban" => [
-                "Teknologi Pembelajaran" => [
-                    [
-                        "pertanyaan_id" => 1,
-                        "jenis_pertanyaan_id" => 1,
-                        "kelompok_pertanyaan_id" => 1,
-                        "kd_jenis_pertanyaan" => "P",
-                        "jenis" => "Perkuliahan",
-                        "kelompok" => "Teknologi Pembelajaran",
-                        "pertanyaan" => "Apakah seluruh proses perkuliahan telah memiliki aktivitas kelas pembelajaran online (Google Meet/Zoom/Discord) pada saat jam perkuliahan?",
-                        "jawaban" => [
-                            "point_id" => 4,
-                            "kd_point" => "S",
-                            "ket_point" => "Setuju",
-                            "mutu" => 4,
-                            "rata_rata" => 4
-                        ]
-                    ]
-                ]
-            ]
-        ];
+        $listTahunAjaran = $this->service->getTahunAjaranKuesionerPerkuliahan()->getData('data');
+
+        // dd($listTahunAjaran);
+        return view('dashboard.admin.h_perkuliahan', [
+            'title' => 'Kuesioner Hasil Perkuliahan',
+            'data' => $listTahunAjaran,
+        ]);
+    }
+    public function HasilChartPerkuliahanViewFilter()
+    {
+        $data =  $this->service->getJawabanHasilKuesioner();
         dd($data);
     }
 
