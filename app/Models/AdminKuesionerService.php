@@ -146,7 +146,7 @@ class AdminKuesionerService extends MyWebService
     }
     public function getJawabanHasilKuesioner()
     {
-        return $this->get(null, "/perkuliahan/hasil/rata-rata?tahun_id=335&kelas_kuliah_ids=3092");
+        return $this->get(null, "/perkuliahan/hasil/v2/rata-rata?tahun_id=290");
 
     }
 

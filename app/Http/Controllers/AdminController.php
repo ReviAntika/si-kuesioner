@@ -79,7 +79,8 @@ class AdminController extends Controller
     public function HasilChartPerkuliahanView()
     {
         $listTahunAjaran = $this->service->getTahunAjaranKuesionerPerkuliahan()->getData('data');
-
+        $data =  $this->service->getJawabanHasilKuesioner();
+        dd($data);
         // dd($listTahunAjaran);
         return view('dashboard.admin.h_perkuliahan', [
             'title' => 'Kuesioner Hasil Perkuliahan',
@@ -88,8 +89,7 @@ class AdminController extends Controller
     }
     public function HasilChartPerkuliahanViewFilter()
     {
-        $data =  $this->service->getJawabanHasilKuesioner();
-        dd($data);
+
     }
 
 
