@@ -34,12 +34,11 @@
                     @if ($data != null)
                         @foreach ($data as $item)
                         <?php
-                            $no=1;
                             $tglAwal = \Carbon\Carbon::parse($item->dari_tgl)->format('d F Y');
                             $tglAkhir = \Carbon\Carbon::parse($item->sampai_tgl)->format('d F Y');
                         ?>
                         <tr>
-                            <td>{{$no++}}</td>
+                            <td>{{$loop->iteration}}</td>
                             <td>{{$item->tahun}}</td>
                             <td>{{$tglAwal .' - '.$tglAkhir}}</td>
                             <td>{{$item->penyelenggara}}</td>

@@ -44,12 +44,14 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $pertanyaan['pertanyaan'] }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btnModalEditPertanyaan" data-bs-target="#modalPerkuliahanPertanyaan"
-                                        data-idPertanyaan="{{$pertanyaan['pertanyaan_id']}}"
-                                        data-idJenisPertanyaan="{{$pertanyaan['jenis_pertanyaan_id']}}"
-                                        data-idKelompokPertanyaan="{{$pertanyaan['kelompok_pertanyaan_id']}}"
-                                        data-pertanyaan="{{$pertanyaan['pertanyaan']}}">
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <button type="button" class="btn btn-primary"       data-bs-toggle="modal" id="btnModalEditPertanyaan"  data-bs-target="#modalPerkuliahanPertanyaan"
+                                            data-idPertanyaan="{{$pertanyaan['pertanyaan_id']}}"
+                                            data-idJenisPertanyaan="{{$pertanyaan['jenis_pertanyaan_id']}}"
+                                            data-idKelompokPertanyaan="{{$pertanyaan['kelompok_pertanyaan_id']}}"
+                                            data-pertanyaan="{{$pertanyaan['pertanyaan']}}"
+                                            onclick="editPertanyaan(this)"
+                                        >
+                                            <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
                                     </td>
 
@@ -72,11 +74,11 @@
       </div>
     </section>
 <!-- Modal -->
-<div class="modal fade" id="modalPerkuliahanPertanyaan" tabindex="-1" aria-labelledby="modalPertanyaanKegiatan" aria-hidden="true">
+<div class="modal fade" id="modalPerkuliahanPertanyaan" tabindex="-1" aria-labelledby="modalPertanyaanPerkuliahan" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalPertanyaanKegiatan">Edit Pertanyaan</h5>
+                <h5 class="modal-title" id="modalPertanyaanPerkuliahan">Edit Pertanyaan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -102,17 +104,21 @@
     </div>
 </div>
 <script>
-    $("#btnModalEditPertanyaan").click(function () {
-    var ids = $(this).attr('data-idPertanyaan');
-    var idjenis = $(this).attr('data-idJenisPertanyaan');
-    var idkelompok = $(this).attr('data-idKelompokPertanyaan');
-    var pert = $(this).attr('data-pertanyaan');
-    $("#idPertanyaan").val( ids );
-    $("#pertanyaan").val( pert );
-    $("#idJenisPertanyaan").val( idjenis );
-    $("#idKelompokPertanyaan").val( idkelompok );
-    $('#myModal').modal('show');
-});
+    function editPertanyaan(element) {
+        const target = $(element);
+
+        var ids = target[0].dataset.idpertanyaan;
+        var idjenis = target[0].dataset.idjenispertanyaan;
+        var idkelompok = target[0].dataset.idkelompokpertanyaan;
+        var pert = target[0].dataset.pertanyaan;
+        $("#idPertanyaan").val( ids );
+        $("#pertanyaan").val( pert );
+        $("#idJenisPertanyaan").val( idjenis );
+        $("#idKelompokPertanyaan").val( idkelompok );
+        $('#myModal').modal('show');
+
+        console.log(ids, idjenis, idkelompok, pert);
+    }
 </script>
     <script>
         $(document).ready(() => {

@@ -5,37 +5,38 @@
 
         <!-- Section Title -->
         <div class="container section-title pb-4" data-aos="fade-up">
-            <h2 class="">Kuesioner Kegiatan Chart</h2>
+            <h2 class="">CHART HASIL KEGIATAN</h2>
         </div><!-- End Section Title -->
 
         <div class="container">
             <!-- Button trigger modal -->
 
             <div class="row gy-2 justify-content-center" data-aos="fade-up">
-                <div class="container">
-                    <div class="d-flex">
-                        <div class="col-md-4">
-                            <form action="">
-                                @csrf
-                                <div class="form-group">
-                                    <select name="cariTahun" id="cariTahun" class="form-control">
-                                        <option value="">Select Tahun Ajaran</option>
-                                        @foreach ($tahun as $item)
-                                            <option value="{{ $item->tahun }}">{{ $item->tahun }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <div class="d-flex justify-content-end">
-                                        <button type="button" class="btn btn-success" id="btnCariTahun"><i
-                                                class="fas fa-search"></i>Cari</button>
-                                    </div>
-                                </div>
-                            </form>
+                <div class="container mb-4">
+                    <form id="formCariKegiatan">
+                        {{-- <div class="form-group">
+                            <select name="cariTahun" id="cariTahun" class="form-control">
+                                <option value="">Select Tahun Ajaran</option>
+                                @foreach ($tahun as $item)
+                                    <option value="{{ $item->tahun }}">{{ $item->tahun }}</option>
+                                @endforeach
+                            </select>
+                        </div> --}}
+                        <div class="form-group d-flex col-lg-4 gap-1">
+                            <select name="cariKegiatan" id="cariKegiatan" class="form-control">
+                                <option value="" selected disabled hidden>Pilih Kegiatan</option>
+                                @foreach ($kegiatan as $item)
+                                    <option value="{{ $item->id }}">{{ $item->kegiatan }}</option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="btn btn-success col-lg-3" id="btnCariKegiatan"><i class="fas fa-search"></i> Cari</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
-                <div class="container">
+                <div class="container" id="cardChartWrapper">
+                </div>
+
+                {{-- <div class="container">
                     <div class="card">
                         <div class="card-header">KEGIATAN</div>
                         <div class="card-body">
@@ -45,18 +46,16 @@
                 </div>
                 @foreach ($kegiatan as $item)
                     <div class="container flex gap-3" id="kegiatan{{ $item->kegiatan }}"></div>
-                @endforeach
-
+                @endforeach --}}
             </div>
         </div>
     </section>
     <script>
-        var chartBar;
-        $("#btnCariTahun").click(function() {
-            const token = $('input[name="_token"]').val();
-            var tahun = $("#cariTahun").val();
+        // var chartBar;
+        // $("#btnCariKegiatan").click(function() {
+            // const kegiatan = $("#cariKegiatan").find(':selected').val();
 
-            $.ajax({
+            /*$.ajax({
                 type: 'POST',
                 url: "/admin/kuesioner/kegiatan/graph/tahun-ajaran/" + tahun,
                 data: {
@@ -229,7 +228,27 @@
                         }
                     });
                 }
-            });
+            });**/
+        // });
+
+        $('#formCariKegiatan').on('submit', (e) => {
+            e.preventDefault();
+            const kegiatanId = $('#cariKegiatan').find(':selected').val();
+
+            $.ajax({
+                url: '/admin/kuesioner/kegiatan/chart/jawaban/' + kegiatanId,
+                type: 'GET',
+                beforeSend: () => {
+                    $('#cardChartWrapper').text('Loading...');
+                },
+                success: (response, xhr, status) => {
+                    // console.log(response);
+                    $('#cardChartWrapper').html(response.content);
+                },
+                error: (xhr, status) => {
+                    console.log(xhr);
+                }
+            })
         });
     </script>
 @endsection

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\HasilKuesionerKegiatanExport;
+use App\Exports\HasilKuesionerPerkuliahanExport;
 use Illuminate\Http\Request;
 use App\Models\AdminKuesionerService;
 use App\Models\Tambahan;
@@ -13,15 +15,18 @@ use App\Models\Pertanyaan;
 use App\Models\PilihanJawaban;
 use App\Models\Saran;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class AdminController extends Controller
 {
     private $service;
+    private $kegiatanService;
 
     public function __construct() {
         $this->service = new AdminKuesionerService();
+        $this->kegiatanService = new Tambahan();
     }
 
     public function kuesionerPerkuliahanView()
@@ -53,6 +58,11 @@ class AdminController extends Controller
         ]);
     }
 
+    public function openKuesionerPerkuliahan($tahunId) {
+        $response = $this->service->bukaKuesionerPerkuliahan($tahunId);
+        return $response;
+    }
+
     public function kuesionerPerkulihanHasilView()
     {
         $listTahunAjaran = $this->service->getTahunAjaranKuesionerPerkuliahan()->getData('data');
@@ -64,34 +74,79 @@ class AdminController extends Controller
         ]);
     }
 
-    public function kuesionerPerkuliahanChartView() {
-
-        $tahun = $this->service->getTahunAjaranKuesionerPerkuliahan()->getData('data');
-
-        // dd($listKuesionerKegiatan);
-
-        return view('dashboard.admin.c_perkuliahan', [
-            'title' => 'Kuesioner Kegiatan',
-            'data' => $tahun,
-        ]);
-    }
-
     public function HasilChartPerkuliahanView()
     {
-        $listTahunAjaran = $this->service->getTahunAjaranKuesionerPerkuliahan()->getData('data');
-        $data =  $this->service->getJawabanHasilKuesioner();
-        dd($data);
+        $listTahunAjaran = $this->service->getTahunAjaranHasilKuesioner()->getData('data');
+
+        // dd($data);
         // dd($listTahunAjaran);
-        return view('dashboard.admin.h_perkuliahan', [
-            'title' => 'Kuesioner Hasil Perkuliahan',
+        return view('dashboard.admin.c_perkuliahan', [
+            'title' => 'Chart Hasil Perkuliahan',
             'data' => $listTahunAjaran,
         ]);
     }
-    public function HasilChartPerkuliahanViewFilter()
-    {
 
+    public function ChartPerkuliahanViewTahun($tahunId) {
+        $hasilKuesioner = $this->service->getJawabanHasilKuesioner($tahunId)->getData('data');
+        $statusResponse = $hasilKuesioner['status'];
+
+        return response()->json([
+            'content' => view('dashboard.admin.c_perkuliahan_hasil', [
+                'data' => $hasilKuesioner['data'],
+                'status' => $statusResponse,
+                'tahunId' => $tahunId
+            ])->render()
+        ]);
     }
 
+    public function exportToExcel($tahunId) {
+        /**
+         * - dapatkan data tahun ajaran dari list tahun yang sudah tersedia di hasil kuesioner
+         * - get data hasil kuesioner berdasarkan tahun id lagi untuk diolah ke excel
+         */
+
+         $tahunAjaran = $this->service->getTahunAjaranHasilKuesioner($tahunId)->getData('data')['data'];
+         $selectedTahunAjaran = array_values(collect($tahunAjaran['kuesioner_perkuliahan']['list_tahun'])
+            ->filter(function ($item) use ($tahunId) {
+                if ($item['tahun_id'] == $tahunId) {
+                    return $item;
+                }
+         })->toArray());
+         $hasilKuesioner = $this->service->getJawabanHasilKuesioner($tahunId)->getData('data')['data'];
+
+         $fileName = $selectedTahunAjaran[0]['tahun'] . ' - ' . $selectedTahunAjaran[0]['ket_smt'] . ' - '
+            . $selectedTahunAjaran[0]['ket_jns_mhs'] . ' - ' . $selectedTahunAjaran[0]['detail_kampus']['lokasi']
+            . ' - ' . $selectedTahunAjaran[0]['detail_jurusan']['nama_jurusan'];
+
+         return Excel::download(new HasilKuesionerPerkuliahanExport($hasilKuesioner, $fileName),  ($fileName . '.xlsx'));
+    }
+
+    public function RenderTablePertanyaan($tahunId, $jnsMhsId, $kdKampus) {
+        ini_set('max_execution_time', 6000);
+        $response = $this->service->getMatkulForKuesionerPerkuliahan($tahunId, $jnsMhsId, $kdKampus)
+            ->getData('data')['data'];
+
+        if (isset($response['matakuliah'])) {
+            $matakuliah = collect($response['matakuliah'])->filter(function ($item) {
+                if (!is_null($item['detail_dosen'])) {
+                    return $item;
+                }
+            })->sortByDesc('detail_kuesioner.total_mahasiswa_mengisi_kuesioner');
+            $filteredResponse = [
+                'matakuliah' => $matakuliah
+            ];
+        } else {
+            $filteredResponse = [
+                'matakuliah' => []
+            ];
+        }
+
+        $content = view('dashboard.admin.render_table_pertanyaan', $filteredResponse)->render();
+
+        return response()->json([
+            'content' => $content
+        ]);
+    }
 
     // CONTROLLER FOR KEGIATAN
 
@@ -107,6 +162,7 @@ class AdminController extends Controller
             'data' => $listKuesionerKegiatan,
         ]);
     }
+
     public function kuesionerKegiatanHasilView() {
         $kegiatan = Kegiatan::all();
 
@@ -172,7 +228,7 @@ class AdminController extends Controller
 
 
 
-        /**
+    /**
      * ini buat tambah data kegiatan
      * langsung masuk ke DB baru
      * ubah 2 tanggal jadi d-m-Y
@@ -201,12 +257,22 @@ class AdminController extends Controller
         $tambah = new Tambahan();
 
         $lihatPertanyaan = $tambah->getListKuesionerKegiatanPertanyaan();
+        $data = $this->kegiatanService->getListKuesionerKegiatanPertanyaan();
+
+        // Ambil data pertanyaan dari hasil service
+        $pertanyaan = $data['list_pertanyaan'];
+
+        // echo '<pre>';
+        // dd($id);
+        // echo '</pre>';
+        // exit;
 
         // dd($lihatPertanyaan);
 
         return view('dashboard.admin.p_kegiatan', [
             'title' => 'Pertanyaan Kuesioner Kegiatan',
             'data' => $lihatPertanyaan,
+            'pertanyaan' => $pertanyaan
         ]);
     }
     public function kuesionerKegiatanPertanyaanEdit(Request $request) {
@@ -215,23 +281,25 @@ class AdminController extends Controller
         // dd($id);
         if ($request->idPertanyaan != null) {
             $data =['pertanyaan'=>$request->pertanyaan];
-            $tambah->UpdateKuesionerKegiatanPertanyaan($id,$data);
-            return redirect()->back()->with('success','Data Berhasil Di Edit');
+            $tambah->UpdateKuesionerKegiatanPertanyaan($id, $data);
+            return redirect()->back()->with('showPertanyaan');
 
         }else{
             abort(403);
         }
     }
+
     public function kuesionerPerkuliahanPertanyaanEdit(Request $request) {
         $pertanyaanId = $request->idPertanyaan;
         $jenisPertanyaanId = $request->idJenisPertanyaan;
         $kelompokPertanyaanId = $request->idKelompokPertanyaan;
         $pertanyaan = $request->pertanyaan;
-        if ($request->idPertanyaan != null) {
-            // dd('masuk');
-           $result =  $this->service->editPertanyaan($pertanyaanId,$kelompokPertanyaanId,$jenisPertanyaanId,$pertanyaan);
-            return redirect()->route('showPertanyaan');
 
+        if (count($request->all()) > 0) {
+            // dd('masuk');
+           $result =  $this->service->editPertanyaan($pertanyaanId,$jenisPertanyaanId,$kelompokPertanyaanId,$pertanyaan);
+
+            return redirect()->route('showPertanyaan');
         }else{
             abort(403);
         }
@@ -239,16 +307,72 @@ class AdminController extends Controller
 
     public function kuesionerKegiatanChartView() {
 
-        $tahun = Kegiatan::groupBy('tahun')->get('tahun');
+        // $tahun = Kegiatan::groupBy('tahun')->get('tahun');
         $kegiatan = Kegiatan::all();
 
         // dd($kegiatan);
 
         return view('dashboard.admin.c_kegiatan', [
             'title' => 'Kuesioner Kegiatan',
-            'tahun' => $tahun,
+            // 'tahun' => $tahun,
             'kegiatan' =>$kegiatan
         ]);
+    }
+
+    public function getJawabanForChartByKegiatanId(Request $request, $kegiatanId) {
+        $query = $request->query('to-excel');
+        $kegiatan = Kegiatan::where('id', $kegiatanId)->first();
+        $listJawaban = Jawaban::where('kegiatan_id', $kegiatanId)->with('pertanyaan')->get();
+        $totalResponden = $listJawaban->groupBy('nama_responden')->count();
+        $responseData = [
+            'total_responden' => $totalResponden,
+            'kegiatan' => $kegiatan->toArray(),
+        ];
+        $tempAllPersentaseJawaban = [];
+
+        if ($totalResponden > 0) {
+            foreach ($listJawaban->groupBy('pertanyaan_id') as $row) {
+                // hitung per satu pertanyaan_id
+                $tempPersentaseJawaban = [
+                    'STS' => ((($row->where('jawaban', 'STS')->count()) / $totalResponden) * 100),
+                    'TS' => ((($row->where('jawaban', 'TS')->count()) / $totalResponden) * 100),
+                    'N' => ((($row->where('jawaban', 'N')->count()) / $totalResponden) * 100),
+                    'S' => ((($row->where('jawaban', 'S')->count()) / $totalResponden) * 100),
+                    'SS' => ((($row->where('jawaban', 'SS')->count()) / $totalResponden) * 100),
+                ];
+
+                array_push($tempAllPersentaseJawaban, [
+                    'pertanyaan_id' => $row[0]['pertanyaan_id'], // pertanyaan_id
+                    'pertanyaan' => $row[0]['pertanyaan']['pertanyaan'], // nama pertanyaan yg diambil dari relasi
+                    'persentase_jawaban' => $tempPersentaseJawaban
+                ]);
+            }
+
+            $responseData['pertanyaan_dan_jawaban'] = $tempAllPersentaseJawaban;
+        } else {
+            $responseData['pertanyaan_dan_jawaban'] = [];
+        }
+
+        if ($query) {
+            $validatedQuery = filter_var($query, FILTER_VALIDATE_BOOLEAN);
+
+            if ($validatedQuery) {
+                $fileName = $responseData['kegiatan']['kd_acara'] . ' - ' . $responseData['kegiatan']['penyelenggara'] . ' - '
+                    . $responseData['kegiatan']['kegiatan'] . ' - ' . $responseData['kegiatan']['dari_tgl'] . ' s.d '
+                    . $responseData['kegiatan']['sampai_tgl'] . '.xlsx';
+                return Excel::download(new HasilKuesionerKegiatanExport($responseData), $fileName);
+            }
+        }
+
+
+        $content = view('dashboard.admin.c_kegiatan_hasil', [
+            'data' => $responseData
+        ])->render();
+
+        return response()->json([
+            'status' => 'success',
+            'content' => $content
+        ], 200);
     }
 
     public function GraphChartKegiatanByTahun($tahun)
