@@ -43,7 +43,7 @@ class AdminKuesionerService extends MyWebService
      */
     public function bukaKuesionerPerkuliahan($tahunId) {
         $payload = [
-            'tahun_id' => $tahunId
+            'tahun_id' => (int) $tahunId
         ];
 
         return $this->post($payload, '/perkuliahan/open');
@@ -136,7 +136,6 @@ class AdminKuesionerService extends MyWebService
             'kelompok_pertanyaan_id' => $kelompokPertanyaanId,
             'pertanyaan' => $pertanyaan,
         ];
-        // dd($payload);
 
         return $this->put($payload, '/pertanyaan/edit');
     }
@@ -144,10 +143,12 @@ class AdminKuesionerService extends MyWebService
     public function getPertanyaanKuesioner($jenisId) {
         return $this->get(null, "/pertanyaan?jenis_id=$jenisId");
     }
-    public function getJawabanHasilKuesioner()
-    {
-        return $this->get(null, "/perkuliahan/hasil/v2/rata-rata?tahun_id=290");
 
+    public function getJawabanHasilKuesioner($tahunId) {
+        return $this->get(null, "/perkuliahan/hasil/v2/rata-rata?tahun_id=$tahunId&chart=true");
     }
 
+    public function getTahunAjaranHasilKuesioner() {
+        return $this->get(null, '/perkuliahan/hasil/tahun-ajaran');
+    }
 }

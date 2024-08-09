@@ -29,8 +29,8 @@
           </li>
           <li class="dropdown"><a href="#"><span>Hasil Kuesioner</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="/admin/kuesioner/perkuliahan/hasil">Perkuliahan</a></li>
-              <li><a href="/admin/kuesioner/kegiatan/hasil">Kegiatan</a></li>
+              {{-- <li><a href="/admin/kuesioner/perkuliahan/hasil">Perkuliahan</a></li>
+              <li><a href="/admin/kuesioner/kegiatan/hasil">Kegiatan</a></li> --}}
               <li><a href="/admin/kuesioner/perkuliahan/chart">Chart Perkuliahan</a></li>
               <li><a href="/admin/kuesioner/kegiatan/chart">Chart Kegiatan</a></li>
             </ul>

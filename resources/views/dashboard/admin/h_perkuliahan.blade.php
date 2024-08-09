@@ -1,3 +1,4 @@
+// tidak di pakai dulu
 @extends('dashboard.main')
 @section('content')
     <!-- About Section -->
@@ -12,12 +13,12 @@
           <!-- Button trigger modal -->
           {{-- {{[0]}} --}}
         <div class="row gy-2 justify-content-center" data-aos="fade-up">
-            
+
             <div class="d-flex">
                 <div class="col-md-4">
                     <form action="">
                         @csrf
-                        <div class="form-group">    
+                        <div class="form-group">
                             <select name="cariTahun" id="cariTahun" class="form-control">
                                 <option value="">Select Tahun Ajaran</option>
                                 @if ($data['status'] == 'success')
@@ -58,7 +59,7 @@
 
     <script>
     $(document).ready(function(){
-        
+
     // $('#cariTahun').select2();
         });
 
@@ -79,14 +80,14 @@
                     "bDestroy": true,
                     "aaData": response,
                     "aoColumns": [
-                        { 
+                        {
                             "mData": null,
                             render: function (data, type, row, meta) {
 	                        return meta.row + meta.settings._iDisplayStart + 1;}
                         },
                         { data: 'tahun' },
                         { data: 'semester' },
-                        { 
+                        {
                             "mData": null,
                             "title": "Aksi",
                             "sortable": false,

@@ -21,14 +21,14 @@ class hasToken
             $auth = new AuthService();
             $token = Session::get('token');
             $checkToken = $auth->checkToken($token);
-            $siteAccess = $auth->validateUserSiteAccess(config('app.url'));
+            // $siteAccess = $auth->validateUserSiteAccess(config('app.url'));
 
-            if ($siteAccess->getData('data')['status'] === 'fail') {
-                return redirect()
-                    ->away(config('myconfig.login.base_url')
-                        . 'verify?site='
-                        . config('app.url'));
-            }
+            // if ($siteAccess->getData('data')['status'] === 'fail') {
+            //     return redirect()
+            //         ->away(config('myconfig.login.base_url')
+            //             . 'verify?site='
+            //             . config('app.url'));
+            // }
 
             if ($checkToken->getData('data')['status'] !== 'success') {
                 return redirect()->route('logout');
